@@ -97,9 +97,10 @@ Vagrant.configure("2") do |config|
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
       end
 
-      config.vm.provision :shell, :inline => <<-EOT
+      config.vm.provision :shell, :privileged => false, :inline => <<-EOT
         docker pull ixkaito/vcdw
-        docker run --name vcdw -p 80:80 -v /home/core/share:/share:rw -d ixkaito/vcdw
+        curl -O https://raw.githubusercontent.com/ixkaito/vcdw-bashrc/master/bashrc && mv -f bashrc .bashrc && source .bashrc
+        vcdwrun
       EOT
 
     end
