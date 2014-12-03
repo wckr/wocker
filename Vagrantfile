@@ -90,18 +90,18 @@ Vagrant.configure("2") do |config|
       config.vm.hostname = i == 1 ? "vcdw.local" : "vcdw#{i}.local"
 
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
-      config.vm.synced_folder "./share", "/home/core/share", create: true, id: "core", nfs: true, mount_options: ['nolock,vers=3,udp']
+      config.vm.synced_folder "./wordpress", "/home/core/wordpress", create: true, id: "core", nfs: true, mount_options: ['nolock,vers=3,udp']
 
       if File.exist?(CLOUD_CONFIG_PATH)
         config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
       end
 
-      config.vm.provision :shell, :privileged => false, :inline => <<-EOT
-        docker pull ixkaito/vcdw
+      config.vm.provision :shell, :privileged => false, :inline => <<-EOS
         curl -O https://raw.githubusercontent.com/ixkaito/vcdw-bashrc/master/bashrc && mv -f bashrc .bashrc && source .bashrc
+        docker pull ixkaito/vcdw
         vcdwrun
-      EOT
+      EOS
 
     end
   end

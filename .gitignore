@@ -2,7 +2,7 @@
 log/
 user-data
 config.rb
-share/
+wordpress/
 
 # Ignore other unneeded files.
 doc/
