@@ -89,8 +89,7 @@ Vagrant.configure("2") do |config|
       config.vm.network :private_network, ip: ip
       config.vm.hostname = i == 1 ? "vcdw.local" : "vcdw#{i}.local"
 
-      # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
-      config.vm.synced_folder "./wordpress", "/home/core/wordpress", create: true, id: "core", nfs: true, mount_options: ['nolock,vers=3,udp']
+      config.vm.synced_folder "./wordpress", "/home/core/wordpress", create: true, id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
 
       if File.exist?(CLOUD_CONFIG_PATH)
         config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
