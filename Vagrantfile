@@ -85,6 +85,10 @@ Vagrant.configure("2") do |config|
         vb.cpus = $vb_cpus
       end
 
+      if Vagrant.has_plugin?("vagrant-hostsupdater")
+        config.hostsupdater.remove_on_suspend = true
+      end
+
       ip = "172.17.8.#{i+100}"
       config.vm.network :private_network, ip: ip
       config.vm.hostname = i == 1 ? "vcdw.local" : "vcdw#{i}.local"
