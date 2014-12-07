@@ -4,24 +4,29 @@
 
 This repo provides a template Vagrantfile to create a development environment of WordPress using CoreOS and Docker.
 
-***1. Install Vagrant*** 
+__1. Install Vagrant__
+
 http://www.vagrantup.com/downloads.html
 
-***2. Install VirtualBox*** 
+__2. Install VirtualBox__
+
 https://www.virtualbox.org/
 
-***3. Install the vagrant-hostsupdater plugin.*** 
+__3. Install the vagrant-hostsupdater plugin.__
+
 ```
 $ vagrant plugin install vagrant-hostsupdater
 ```
 
-***4. Clone VCDW Repo*** 
+__4. Clone VCDW Repo__
+
 ```
 $ git clone https://github.com/ixkaito/vcdw.git
 $ cd vcdw
 ```
 
-***5. Start Up VCDW*** 
+__5. Start Up VCDW__
+
 ```
 $ vagrant up
 ```
