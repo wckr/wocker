@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./share", "/home/core/share", create: true, id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
 
   config.vm.provision :shell, :privileged => false, :inline => <<-EOS
-    curl -O https://raw.githubusercontent.com/ixkaito/vcdw-bashrc/master/bashrc && mv -f bashrc .bashrc && source .bashrc
+    curl -O https://raw.githubusercontent.com/ixkaito/vcdw-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
     docker pull ixkaito/vcdw
     vcdwrun
   EOS
