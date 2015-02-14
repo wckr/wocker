@@ -41,15 +41,15 @@ Vagrant.configure("2") do |config|
     config.hostsupdater.remove_on_suspend = true
   end
 
-  config.vm.hostname = "vcdw.local"
+  config.vm.hostname = "wocker.dev"
   config.vm.network :private_network, ip: "172.17.8.23"
 
   config.vm.synced_folder "./share", "/home/core/share", create: true, id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
 
   config.vm.provision :shell, :privileged => false, :inline => <<-EOS
-    curl -O https://raw.githubusercontent.com/ixkaito/vcdw-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
-    docker pull ixkaito/vcdw
-    vcdwrun
+    curl -O https://raw.githubusercontent.com/ixkaito/wocker-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
+    docker pull ixkaito/wocker
+    wocker
   EOS
 
 end
