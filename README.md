@@ -4,6 +4,8 @@
 
 This repo provides a template Vagrantfile to create a Docker-based development environment of WordPress.
 
+## Getting Started
+
 __1. Install Vagrant__  
 http://www.vagrantup.com/
 
@@ -14,6 +16,7 @@ __3. Install the vagrant-hostsupdater plugin.__
 ```
 $ vagrant plugin install vagrant-hostsupdater
 ```
+Windows is not allowed to change hosts-file. Please add 'wocker.dev 172.17.8.23' by yourself!
 
 __4. Clone the Wocker Repo__
 ```
@@ -30,3 +33,14 @@ Watch as the script ends, as an administrator or su password may be required.
 
 __6. Visit following site in your browser__  
 http://wocker.dev/
+
+## Credentials
+
+__WordPress__
+* User: `admin`
+* Pass: `admin`
+
+__Database__
+* Name: `wordpress`
+* User: `wordpress`
+* Pass: `wordpress`
