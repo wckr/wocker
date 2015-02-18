@@ -1,8 +1,8 @@
 # Wocker
 
-## A rapid development environment of WordPress
+## Docker-based development environment of WordPress
 
-This repo provides a template Vagrantfile to create a WordPress development environment using CoreOS and Docker.
+This repo provides a template Vagrantfile to create a Docker-based development environment of WordPress.
 
 __1. Install Vagrant__  
 http://www.vagrantup.com/
@@ -25,5 +25,8 @@ __5. Start Up Wocker__
 ```
 $ vagrant up
 ```
+This could take a while on the first run as your local machine downloads the required files.  
+Watch as the script ends, as an administrator or su password may be required.
 
-Your WordPress URL will be [http://wocker.dev](http://wocker.dev).
+__6. Visit following site in your browser__  
+http://wocker.dev/
