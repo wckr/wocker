@@ -34,7 +34,7 @@ Watch as the script ends, as an administrator or su password may be required.
 __6. Visit following site in your browser__  
 http://wocker.dev/
 
-## Credentials
+## Credentials and Such
 
 __WordPress__
 * User: `admin`
@@ -44,3 +44,6 @@ __Database__
 * Name: `wordpress`
 * User: `wordpress`
 * Pass: `wordpress`
+
+__Local WordPress Source__
+* Path: `data/wordpress`
