@@ -16,7 +16,7 @@ __3. Install the vagrant-hostsupdater plugin.__
 ```
 $ vagrant plugin install vagrant-hostsupdater
 ```
-Windows is not allowed to change hosts-file. Please add 'wocker.dev 172.17.8.23' by yourself!
+Windows is not allowed to change hosts-file. Please add "wocker.dev 172.17.8.23" by yourself!
 
 __4. Clone the Wocker Repo__
 ```
@@ -47,3 +47,30 @@ __Database__
 
 __Local WordPress Source__
 * Path: `data/wordpress`
+
+## Run a new Wocker container
+
+To run a new Wocker container, you have to stop or remove the running Wocker container before that.
+
+__1. Connect to the Wocker machine via SSH__  
+```
+$ vagrant ssh
+```
+
+__2. Remove the running Wocker container__  
+```
+core@wocker ~ $ docker rm -f wocker
+```
+The first Wocker container's name after `$ vagrant up` is "wocker".
+
+__3. Remove the existing WordPress files (optional)__  
+```
+core@wocker ~ $ rm -rf ~/data/wordpress
+```
+If you don't remove the existing WordPress files, Wocker will find wp-config.php in ~/data/wordpress and use the existing WordPress.
+
+__4. Use a wocker command to run a new Wocker container__  
+```
+core@wocker ~ $ wocker run
+```
+For more information of Wocker commands, run `$ wocker --help` or see https://github.com/ixkaito/wocker-bashrc
