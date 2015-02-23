@@ -12,13 +12,17 @@ $vb_memory = 1024
 $vb_cpus = 1
 
 Vagrant.configure("2") do |config|
+  # always use Vagrants insecure key
+  config.ssh.insert_key = false
+
   config.vm.box = "coreos-%s" % $update_channel
   config.vm.box_version = ">= 308.0.1"
   config.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json" % $update_channel
 
-  config.vm.provider :vmware_fusion do |vb, override|
-    override.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json" % $update_channel
-    vb.gui = $vb_gui
+  ["vmware_fusion", "vmware_workstation"].each do |vmware|
+    config.vm.provider vmware do |v, override|
+      override.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json" % $update_channel
+    end
   end
 
   config.vm.provider :virtualbox do |vb|
@@ -33,7 +37,7 @@ Vagrant.configure("2") do |config|
   end
 
   # plugin conflict
-  if Vagrant.has_plugin?("vagrant-vbguest") then
+  if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
   end
 
@@ -49,7 +53,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, :privileged => false, :inline => <<-EOS
     curl -O https://raw.githubusercontent.com/ixkaito/wocker-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
     docker pull ixkaito/wocker
-    wocker
+    wocker run
   EOS
 
 end
