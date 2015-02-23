@@ -12,19 +12,19 @@ http://www.vagrantup.com/
 __2. Install VirtualBox__  
 https://www.virtualbox.org/
 
-__3. Install the vagrant-hostsupdater plugin.__
+__3. Install the vagrant-hostsupdater plugin.__  
 ```
 $ vagrant plugin install vagrant-hostsupdater
 ```
 Windows is not allowed to change hosts-file. Please add "wocker.dev 172.17.8.23" by yourself!
 
-__4. Clone the Wocker Repo__
+__4. Clone the Wocker Repo__  
 ```
 $ git clone https://github.com/ixkaito/wocker.git
 $ cd wocker
 ```
 
-__5. Start Up Wocker__
+__5. Start Up Wocker__  
 ```
 $ vagrant up
 ```
@@ -36,17 +36,22 @@ http://wocker.dev/
 
 ## Credentials and Such
 
-__WordPress__
+__WordPress__  
 * User: `admin`
 * Pass: `admin`
 
-__Database__
+__Database__  
 * Name: `wordpress`
 * User: `wordpress`
 * Pass: `wordpress`
 
-__Local WordPress Source__
-* Path: `data/wordpress`
+__WordPress Source (Synced)__  
+* Local Machine: `data/wordpress`
+* Guest Machine: `/home/core/data/wordpress`
+
+__Synced Folder__  
+* Local Machine: `data`
+* Guest Machine: `/home/core/data`
 
 ## Run a new Wocker container
 
