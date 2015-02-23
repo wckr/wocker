@@ -3,9 +3,8 @@ log/
 user-data
 config.rb
 data/
-wordpress/
 
-# Ignore other unneeded files.
+# Ignore other unnecessary files.
 doc/
 *.swp
 *~
