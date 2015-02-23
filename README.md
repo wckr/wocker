@@ -24,7 +24,7 @@ $ git clone https://github.com/ixkaito/wocker.git
 $ cd wocker
 ```
 
-__5. Start Up Wocker__  
+__5. Start up Wocker__  
 ```
 $ vagrant up
 ```
@@ -46,18 +46,18 @@ __Database__
 * Pass: `wordpress`
 
 __WordPress Source (Synced)__  
-* Local Machine: `data/wordpress`
-* Guest Machine: `/home/core/data/wordpress`
+* Local machine: `data/wordpress`
+* Guest machine: `/home/core/data/wordpress`
 
 __Synced Folder__  
-* Local Machine: `data`
-* Guest Machine: `/home/core/data`
+* Local machine: `data`
+* Guest machine: `/home/core/data`
 
 ## Run a new Wocker container
 
-To run a new Wocker container, you have to stop or remove the running Wocker container before that.
+To run a new one, you have to stop or remove the running Wocker container before that.
 
-__1. Connect to the Wocker machine via SSH__  
+__1. Connect to the guest machine via SSH__  
 ```
 $ vagrant ssh
 ```
