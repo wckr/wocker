@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, :privileged => false, :inline => <<-EOS
     curl -O https://raw.githubusercontent.com/ixkaito/wocker-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
     docker pull ixkaito/wocker
-    wocker run
+    wocker run --name wocker
   EOS
 
 end
