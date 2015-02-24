@@ -1,8 +1,6 @@
 # Wocker
 
-## Docker-based development environment of WordPress
-
-This repo provides a template Vagrantfile to create a Docker-based development environment of WordPress.
+This repository provides a template Vagrantfile to create a Docker-based rapid development environment of WordPress. __IT TAKES JUST 3 SECONDS TO CREATE A NEW ONE!__
 
 ## Getting Started
 
@@ -45,7 +43,7 @@ __Database__
 * User: `wordpress`
 * Pass: `wordpress`
 
-__WordPress Source (Synced)__  
+__WordPress Source of running container (Synced)__  
 * Local machine: `data/wordpress`
 * Guest machine: `/home/core/data/wordpress`
 
@@ -53,29 +51,32 @@ __Synced Folder__
 * Local machine: `data`
 * Guest machine: `/home/core/data`
 
-## Run a new Wocker container
-
-To run a new one, you have to stop or remove the running Wocker container before that.
+## Run a new Wocker container (3 SECONDS)
 
 __1. Connect to the guest machine via SSH__  
 ```
 $ vagrant ssh
 ```
 
-__2. Remove the running Wocker container__  
+__2. Use Wocker commands to stop or remove the running Wocker container__  
 ```
-core@wocker ~ $ docker rm -f wocker
+core@wocker ~ $ wocker stop CONTAINER
 ```
-The first Wocker container's name after `$ vagrant up` is "wocker".
+or
+```
+core@wocker ~ $ wocker kill CONTAINER
+```
+or
+```
+core@wocker ~ $ wocker rm CONTAINER
+```
+e.g. `$ wocker stop wocker`  
+Note: The first Wocker container's name after your first `$ vagrant up` is "wocker".  
+You can use a docker command `$ docker ps` or a wocker command `$ wocker ps` (alias) to list running containers.
 
-__3. Remove the existing WordPress files (optional)__  
-```
-core@wocker ~ $ rm -rf ~/data/wordpress
-```
-If you don't remove the existing WordPress files, Wocker will find wp-config.php in ~/data/wordpress and use the existing WordPress.
-
-__4. Use a wocker command to run a new Wocker container__  
+__3. Use a wocker command to run a new Wocker container__  
 ```
 core@wocker ~ $ wocker run
 ```
-For more information of Wocker commands, run `$ wocker --help` or see https://github.com/ixkaito/wocker-bashrc
+You can use the name option to assign a specific name to the container.  
+e.g. `$ wocker run --name wp`
