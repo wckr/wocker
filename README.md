@@ -4,4 +4,4 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 
 ## Documentation
 
-[http://ixkaito.github.io/wocker/](http://ixkaito.github.io/wocker/)
+[http://wocker-prj.github.io/](http://wocker-prj.github.io/)
