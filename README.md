@@ -5,3 +5,8 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 ## Documentation
 
 [http://wckr.github.io/](http://wckr.github.io/)
+
+## Contributors
+
+- Kite [@ixkaito](https://github.com/ixkaito)
+- Andrew Jones [@supersoju](https://github.com/supersoju)
