@@ -4,7 +4,7 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 
 ## Version
 
-0.4.0
+0.5.0
 
 ## Documentation
 
