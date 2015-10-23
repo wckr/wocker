@@ -11,3 +11,4 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 - Kite [@ixkaito](https://github.com/ixkaito)
 - Andrew Jones [@supersoju](https://github.com/supersoju)
 - Laszlo [@laczoka](https://github.com/laczoka)
+- Daniel Bachhuber [@danielbachhuber](https://github.com/danielbachhuber)
