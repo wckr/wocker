@@ -1,39 +1,20 @@
 # -*- mode: ruby -*-
-# # vi: set ft=ruby :
+# vi: set ft=ruby :
 
-require 'fileutils'
+Vagrant.configure(2) do |config|
+  config.vm.define "docker-root"
+  config.vm.box = "ailispaw/docker-root"
 
-Vagrant.require_version ">= 1.6.0"
-
-# Defaults for config options
-$update_channel = "stable"
-$vb_gui = false
-$vb_memory = 1024
-$vb_cpus = 1
-
-Vagrant.configure("2") do |config|
-  # always use Vagrants insecure key
-  config.ssh.insert_key = false
-
-  config.vm.box = "coreos-%s" % $update_channel
-  config.vm.box_version = ">= 308.0.1"
-  config.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json" % $update_channel
-
-  ["vmware_fusion", "vmware_workstation"].each do |vmware|
-    config.vm.provider vmware do |v, override|
-      override.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json" % $update_channel
+  if Vagrant.has_plugin?("vagrant-triggers") then
+    config.trigger.after [:up, :resume] do
+      info "Adjusting datetime after suspend and resume."
+      run_remote "sudo sntp -4sSc pool.ntp.org; date"
     end
   end
 
-  config.vm.provider :virtualbox do |vb|
-    # On VirtualBox, we don't have guest additions or a functional vboxsf
-    # in CoreOS, so tell Vagrant that so it can be smarter.
-    vb.check_guest_additions = false
-    vb.functional_vboxsf     = false
-
-    vb.gui = $vb_gui
-    vb.memory = $vb_memory
-    vb.cpus = $vb_cpus
+  # Adjusting datetime before provisioning.
+  config.vm.provision :shell, run: "always" do |sh|
+    sh.inline = "sntp -4sSc pool.ntp.org; date"
   end
 
   # plugin conflict
@@ -46,14 +27,14 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.hostname = "wocker.dev"
-  config.vm.network :private_network, ip: "172.17.8.23"
+  config.vm.network :private_network, ip: "192.168.33.23"
 
-  config.vm.synced_folder "./data", "/home/core/data", create: true, id: "core", nfs: true, mount_options: ['nolock,vers=3,udp']
+  config.vm.synced_folder "./data", "/home/docker/data"
 
-  config.vm.provision :shell, privileged: false, inline: <<-EOS
-    curl -O https://raw.githubusercontent.com/wckr/wocker-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
-    docker pull wocker/wocker:latest
-    wocker run --name wocker
-  EOS
+  # for NFS synced folder
+  # config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
+
+  # for RSync synced folder
+  # config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links"]
 
 end
