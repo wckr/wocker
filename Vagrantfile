@@ -29,7 +29,7 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = "wocker.dev"
   config.vm.network :private_network, ip: "192.168.33.23"
 
-  config.vm.synced_folder "./data", "/home/docker/data"
+  config.vm.synced_folder "./data", "/home/docker/data", create: true
 
   # for NFS synced folder
   # config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
