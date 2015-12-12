@@ -32,9 +32,11 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "./data", "/home/docker/data", create: true
 
   # for NFS synced folder
-  # config.vm.synced_folder ".", "/vagrant", type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
+  # config.vm.synced_folder "./data", "/home/docker/data", create: true, type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
 
-  # for RSync synced folder
-  # config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links"]
-
+  # config.vm.provision :shell, privileged: false, inline: <<-EOS
+  #   curl -O https://raw.githubusercontent.com/wckr/wocker-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
+  #   docker pull wocker/wocker:latest
+  #   wocker run --name wocker
+  # EOS
 end
