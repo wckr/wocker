@@ -13,6 +13,7 @@ force=''
 running=''
 confirmation=''
 theme_test_data_url=''
+USER=wocker
 
 wocker_usage() {
   echo "Usage: wocker COMMAND [arg...]"
@@ -325,9 +326,9 @@ case "$1" in
         cid=$(docker ps -q)
         if [[ ! $cid =~ $'\n' ]]; then
           if [[ "$2" = 'shell' ]]; then
-            docker exec -it $cid wp --allow-root ${@:2}
+            docker exec -u $USER -it $cid wp ${@:2}
           else
-            docker exec $cid wp --allow-root ${@:2}
+            docker exec -u $USER $cid wp ${@:2}
           fi
         fi
       fi
@@ -355,10 +356,10 @@ case "$1" in
       if [[ $(docker ps -q) ]]; then
         cid=$(docker ps -q)
         if [[ ! $cid =~ $'\n' ]]; then
-          docker exec $cid curl -OL $theme_test_data_url \
-          && docker exec $cid wp --allow-root plugin install wordpress-importer --activate \
-          && docker exec $cid wp --allow-root import ${theme_test_data_url##*/} --authors=create \
-          && docker exec $cid rm ${theme_test_data_url##*/}
+          docker exec -u $USER $cid curl -OL $theme_test_data_url \
+          && docker exec -u $USER $cid wp plugin install wordpress-importer --activate \
+          && docker exec -u $USER $cid wp import ${theme_test_data_url##*/} --authors=create \
+          && docker exec -u $USER $cid rm ${theme_test_data_url##*/}
         fi
       fi
 
