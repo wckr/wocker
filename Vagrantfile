@@ -34,9 +34,13 @@ Vagrant.configure(2) do |config|
   # for NFS synced folder
   # config.vm.synced_folder "./data", "/home/docker/data", create: true, type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
 
-  # config.vm.provision :shell, privileged: false, inline: <<-EOS
-  #   curl -O https://raw.githubusercontent.com/wckr/wocker-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
-  #   docker pull wocker/wocker:latest
-  #   wocker run --name wocker
-  # EOS
+  config.vm.provision :shell, privileged: false, inline: <<-EOS
+    set -e
+    wget -q -O ~/.bashrc https://raw.githubusercontent.com/wckr/wocker-bashrc/master/bashrc
+    sed -i -e 's/curl -OL/wget/' ~/.bashrc
+    source ~/.bashrc
+    echo "source ~/.bashrc" > ~/.bash_profile
+    docker pull wocker/wocker:latest
+    wocker run --name wocker
+  EOS
 end
