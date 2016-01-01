@@ -27,7 +27,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.hostname = "wocker.dev"
-  config.vm.network :private_network, ip: "192.168.33.23"
+  config.vm.network :private_network, ip: "10.0.23.16"
 
   config.vm.synced_folder "./data", "/home/docker/data", create: true
 
