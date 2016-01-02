@@ -2,8 +2,9 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-  config.vm.define "docker-root"
+  config.vm.define "wocker"
   config.vm.box = "ailispaw/docker-root"
+  config.ssh.username = "wocker"
 
   if Vagrant.has_plugin?("vagrant-triggers") then
     config.trigger.after [:up, :resume] do
@@ -34,13 +35,11 @@ Vagrant.configure(2) do |config|
   # for NFS synced folder
   # config.vm.synced_folder "./data", "/home/docker/data", create: true, type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
 
+  config.vm.provision :shell do |s|
+    s.path = 'provision.sh'
+  end
+
   config.vm.provision :shell, privileged: false, inline: <<-EOS
-    set -e
-    wget -q -O ~/.bashrc https://raw.githubusercontent.com/wckr/wocker-bashrc/master/bashrc
-    sed -i -e 's/curl -OL/wget/' ~/.bashrc
-    source ~/.bashrc
-    echo "source ~/.bashrc" > ~/.bash_profile
-    docker pull wocker/wocker:latest
-    wocker run --name wocker
+    # wocker run --name wocker
   EOS
 end
