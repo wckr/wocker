@@ -254,7 +254,7 @@ case "$1" in
     if [[ "$2" = '--help' ]]; then
       wocker_update_usage
     else
-      curl -OL https://raw.githubusercontent.com/wckr/wocker-bashrc/master/bashrc && mv -f bashrc ~/.bashrc && source ~/.bashrc
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker
       docker pull wocker/wocker:latest
     fi
     ;;
