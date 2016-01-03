@@ -305,43 +305,6 @@ case "$1" in
     ;;
 
   #
-  # wocker destroy
-  #
-  'destroy' )
-
-    if [[ "$2" = '--help' ]]; then
-      wocker_destroy_usage
-    else
-
-      if [[ $(docker ps -a -q) ]]; then
-
-        echo 'Are you sure you want to remove all containers and related files? [y/N]'
-        read confirmation
-
-        case $confirmation in
-          'y' )
-            if [[ "$2" = '--files' || "$2" = '--files=true' ]]; then
-              for cid in $(docker ps -a -q); do
-                dirname=$(docker inspect --format='{{.Name}}' $cid)
-                dirname=${dirname#*/}
-                rm -rf ~/data/${dirname}
-              done
-            fi
-            docker rm -f $(docker ps -a -q)
-            ;;
-          * )
-            echo 'Containers and file will not be removed, since the confirmation was declined.'
-            ;;
-        esac
-
-      else
-        echo 'Nothing to destroy.'
-      fi
-
-    fi
-    ;;
-
-  #
   # wocker --help | wocker -h
   #
   'help' | '--help' | '-h' )
@@ -406,6 +369,43 @@ case "$1" in
           && docker exec -u $USER $cid wp import ${theme_test_data_url##*/} --authors=create \
           && docker exec -u $USER $cid rm ${theme_test_data_url##*/}
         fi
+      fi
+
+    fi
+    ;;
+
+  #
+  # wocker destroy
+  #
+  'destroy' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_destroy_usage
+    else
+
+      if [[ $(docker ps -a -q) ]]; then
+
+        echo 'Are you sure you want to remove all containers and related files? [y/N]'
+        read confirmation
+
+        case $confirmation in
+          'y' )
+            if [[ "$2" = '--files' || "$2" = '--files=true' ]]; then
+              for cid in $(docker ps -a -q); do
+                dirname=$(docker inspect --format='{{.Name}}' $cid)
+                dirname=${dirname#*/}
+                rm -rf ~/data/${dirname}
+              done
+            fi
+            docker rm -f $(docker ps -a -q)
+            ;;
+          * )
+            echo 'Containers and file will not be removed, since the confirmation was declined.'
+            ;;
+        esac
+
+      else
+        echo 'Nothing to destroy.'
       fi
 
     fi
