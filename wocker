@@ -175,7 +175,7 @@ wocker_print_version() {
 case "$1" in
 
   #
-  # $ wocker run
+  # wocker run
   #
   'run' )
 
@@ -228,7 +228,7 @@ case "$1" in
     ;;
 
   #
-  # $ wocker stop
+  # wocker stop
   #
   'stop' )
 
@@ -246,7 +246,7 @@ case "$1" in
     ;;
 
   #
-  # $ wocker rm
+  # wocker rm
   #
   'rm' )
 
@@ -282,7 +282,7 @@ case "$1" in
     ;;
 
   #
-  # $ wocker update
+  # wocker update
   #
   'update' )
 
@@ -296,7 +296,7 @@ case "$1" in
     ;;
 
   #
-  # $ wocker destroy
+  # wocker destroy
   #
   'destroy' )
 
@@ -333,14 +333,14 @@ case "$1" in
     ;;
 
   #
-  # $ wocker --help | $ wocker -h
+  # wocker --help | wocker -h
   #
   'help' | '--help' | '-h' )
     wocker_usage
     ;;
 
   #
-  # $ wocker version | $ wocker --version | $ wocker -v
+  # wocker version | wocker --version | wocker -v
   #
   'version' | '--version' | '-v' )
     if [[ "$2" = '--help' ]]; then
@@ -351,7 +351,7 @@ case "$1" in
     ;;
 
   #
-  # $ wocker wp
+  # wocker wp
   #
   'wp' )
 
@@ -372,7 +372,7 @@ case "$1" in
     ;;
 
   #
-  # $ wocker theme-test
+  # wocker theme-test
   #
   'theme-test' )
 
