@@ -183,7 +183,7 @@ case "$1" in
         ports=$(docker inspect --format='{{.NetworkSettings.Ports}}' $(docker ps -q))
       fi
 
-      if [[ $ports =~ "HostIp:0.0.0.0 HostPort:80" ]]; then
+      if [[ $ports =~ "0.0.0.0 80" ]]; then
         echo -e "\033[${RED}mCannot start container $cname: Bind for 0.0.0.0:80 failed: port is already allocated\033[m"
 
       # Use existing WordPress files to run a container
