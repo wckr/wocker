@@ -184,7 +184,7 @@ case "$1" in
       fi
 
       if [[ $ports =~ "0.0.0.0 80" ]]; then
-        echo -e "\033[${RED}mCannot start container $cname: Bind for 0.0.0.0:80 failed: port is already allocated\033[m"
+        echo -e "\033[${RED}mCannot create container $cname: Bind for 0.0.0.0:80 failed: port is already allocated\033[m"
 
       # Use existing WordPress files to run a container
       elif [[ $cname && -d ~/data/${cname} ]]; then
