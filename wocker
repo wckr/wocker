@@ -1,8 +1,11 @@
 #!/bin/bash
 
-version='0.9.2'
+VERSION='0.9.2'
+RED=31
+USER=wocker
+DOCROOT=/var/www/wordpress
+
 image='wocker/wocker:latest'
-red=31
 cname=''
 ports=''
 cid=''
@@ -13,7 +16,6 @@ force=''
 running=''
 confirmation=''
 theme_test_data_url=''
-USER=wocker
 
 wocker_usage() {
   echo "Usage: wocker COMMAND [arg...]"
@@ -182,11 +184,11 @@ case "$1" in
       fi
 
       if [[ $ports =~ "HostIp:0.0.0.0 HostPort:80" ]]; then
-        echo -e "\033[${red}mCannot start container $cname: Bind for 0.0.0.0:80 failed: port is already allocated\033[m"
+        echo -e "\033[${RED}mCannot start container $cname: Bind for 0.0.0.0:80 failed: port is already allocated\033[m"
 
       # Use existing WordPress files to run a container
       elif [[ $cname && -d ~/data/${cname} ]]; then
-        docker run -d --name $cname -p 80:80 -p 3306:3306 -v ~/data/${cname}:/var/www/wordpress:rw $image
+        docker run -d --name $cname -p 80:80 -p 3306:3306 -v ~/data/${cname}:${DOCROOT}:rw $image
 
       # Or copy WordPress files from the image to run a container
       else
@@ -202,9 +204,9 @@ case "$1" in
         dirname=$(docker inspect --format='{{.Name}}' $(docker ps -l -q)) && \
         dirname=${dirname#*/} && \
         cname=$dirname && \
-        docker cp $(docker ps -l -q):/var/www/wordpress ~/data/${dirname} && \
+        docker cp $(docker ps -l -q):${DOCROOT} ~/data/${dirname} && \
         docker rm -f $(docker ps -l -q) && \
-        docker run -d --name $cname -p 80:80 -p 3306:3306 -v ~/data/${dirname}:/var/www/wordpress:rw $image
+        docker run -d --name $cname -p 80:80 -p 3306:3306 -v ~/data/${dirname}:${DOCROOT}:rw $image
       fi
 
     fi
@@ -310,7 +312,7 @@ case "$1" in
     if [[ "$2" = '--help' ]]; then
       wocker_version_usage
     else
-      echo "Version: $version"
+      echo "Version: $VERSION"
     fi
     ;;
 
