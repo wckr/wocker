@@ -157,6 +157,10 @@ wocker_theme_test_usage() {
   echo '  LOCALE    Select which language you want to import. `en` and `ja` are available. If omitted, `en` will be imported.'
 }
 
+wocker_print_version() {
+  echo "Version: $VERSION"
+}
+
 case "$1" in
 
   #
@@ -258,6 +262,7 @@ case "$1" in
     else
       sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker
       docker pull wocker/wocker:latest
+      wocker_print_version
     fi
     ;;
 
@@ -312,7 +317,7 @@ case "$1" in
     if [[ "$2" = '--help' ]]; then
       wocker_version_usage
     else
-      echo "Version: $VERSION"
+      wocker_print_version
     fi
     ;;
 
