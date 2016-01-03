@@ -83,6 +83,17 @@ wocker_run_usage() {
   echo '  IMAGE[:TAG]   Docker image. If omitted, it will be wocker/wocker:latest.'
 }
 
+wocker_stop_usage() {
+  echo 'Usage: wocker stop [OPTIONS] [CONTAINER...]'
+  echo ''
+  echo 'Stop a running container.'
+  echo 'Sending SIGTERM and then SIGKILL after a grace period'
+  echo ''
+  echo '  --help=false  Print usage'
+  echo '  -t, --time=10 Seconds to wait for stop before killing it'
+  echo '  CONTAINER     If omitted, all running containers will be stopped.'
+}
+
 wocker_rm_usage() {
   echo 'Usage: wocker rm [--force=false] CONTAINER [CONTAINER...]'
   echo ''
@@ -211,6 +222,24 @@ case "$1" in
         docker cp $(docker ps -l -q):${DOCROOT} ~/data/${dirname} && \
         docker rm -f $(docker ps -l -q) && \
         docker run -d --name $cname -p 80:80 -p 3306:3306 -v ~/data/${dirname}:${DOCROOT}:rw $image
+      fi
+
+    fi
+    ;;
+
+  #
+  # $ wocker stop
+  #
+  'stop' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_stop_usage
+    else
+
+      if [[ "$2" ]]; then
+        docker $@
+      elif [[ $(docker ps -q) ]]; then
+        docker stop $(docker ps -q)
       fi
 
     fi
