@@ -18,6 +18,7 @@ confirmation=''
 theme_test_data_url=''
 
 wocker_usage() {
+  echo ""
   echo "Usage: wocker COMMAND [arg...]"
   echo ""
   echo "Commands:"
@@ -75,6 +76,7 @@ wocker_usage() {
 }
 
 wocker_run_usage() {
+  echo ''
   echo 'Usage: wocker run [--name=""] [IMAGE[:TAG]]'
   echo ''
   echo 'Run a new container'
@@ -84,6 +86,7 @@ wocker_run_usage() {
 }
 
 wocker_stop_usage() {
+  echo ''
   echo 'Usage: wocker stop [OPTIONS] [CONTAINER...]'
   echo ''
   echo 'Stop a running container.'
@@ -95,6 +98,7 @@ wocker_stop_usage() {
 }
 
 wocker_rm_usage() {
+  echo ''
   echo 'Usage: wocker rm [--force=false] CONTAINER [CONTAINER...]'
   echo ''
   echo 'Remove one or more containers'
@@ -103,24 +107,28 @@ wocker_rm_usage() {
 }
 
 wocker_update_usage() {
+  echo ''
   echo 'Usage: wocker update'
   echo ''
   echo 'Update the command line and the Docker image of Wocker.'
 }
 
 wocker_version_usage() {
+  echo ''
   echo 'Usage: wocker version | --version | -v'
   echo ''
   echo 'Show the Wocker version information'
 }
 
 wocker_destroy_usage() {
+  echo ''
   echo 'Usage: wocker destroy [--files=false]'
   echo ''
   echo "Remove all containers and local related files if '--files' argument is set"
 }
 
 wocker_wp_usage() {
+  echo ''
   echo 'Usage: wocker wp COMMAND SUBCOMMAND arg...'
   echo ''
   echo 'Execute WP-CLI commands in the running container'
@@ -161,6 +169,7 @@ wocker_wp_usage() {
 }
 
 wocker_theme_test_usage() {
+  echo ''
   echo 'Usage: wocker theme-test [LOCALE]'
   echo ''
   echo 'Import theme unit test data'
