@@ -4,7 +4,7 @@
 Vagrant.configure(2) do |config|
   config.vm.define "wocker"
   config.vm.box = "ailispaw/docker-root"
-  config.ssh.username = "wocker"
+  config.vm.box_version = ">= 1.2.6"
 
   if Vagrant.has_plugin?("vagrant-triggers") then
     config.trigger.after [:up, :resume] do
@@ -32,14 +32,8 @@ Vagrant.configure(2) do |config|
 
   config.vm.synced_folder "./data", "/home/docker/data", create: true
 
-  # for NFS synced folder
-  # config.vm.synced_folder "./data", "/home/docker/data", create: true, type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
-
   config.vm.provision :shell do |s|
     s.path = 'provision.sh'
   end
 
-  config.vm.provision :shell, privileged: false, inline: <<-EOS
-    # wocker run --name wocker
-  EOS
 end
