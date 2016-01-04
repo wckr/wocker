@@ -13,3 +13,7 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 - Laszlo [@laczoka](https://github.com/laczoka)
 - Daniel Bachhuber [@danielbachhuber](https://github.com/danielbachhuber)
 - A.I. [@ailispaw](https://github.com/ailispaw)
+
+## Copyright / License
+
+Copyright (c) 2015-2016, the contributors of the Wocker project under the GPL version 2 or later.
