@@ -247,8 +247,8 @@ case "$1" in
 
       if [[ "$2" ]]; then
         docker $@
-      elif [[ $(docker ps -q) ]]; then
-        docker stop $(docker ps -q)
+      elif [[ $(docker ps) ]]; then
+        docker stop $(docker ps --filter "label=color")
       fi
 
     fi
