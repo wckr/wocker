@@ -93,9 +93,9 @@ wocker_stop_usage() {
   echo 'Stop a running container.'
   echo 'Sending SIGTERM and then SIGKILL after a grace period'
   echo ''
-  echo '  --help=false  Print usage'
-  echo '  -t, --time=10 Seconds to wait for stop before killing it'
-  echo '  CONTAINER     If omitted, all running containers will be stopped.'
+  echo '  --help=false    Print usage'
+  echo '  -t, --time=10   Seconds to wait for stop before killing it'
+  echo '  CONTAINER       If omitted, all running containers will be stopped.'
 }
 
 wocker_rm_usage() {
