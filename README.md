@@ -16,4 +16,4 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 
 ## Copyright / License
 
-Copyright (c) 2015-2016, the contributors of the Wocker project under the GPL version 2 or later.
+Copyright (c) 2015-2016, the contributors of the Wocker project under the [GPL version 2](https://github.com/wckr/wocker/blob/master/LICENSE) or later.
