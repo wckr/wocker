@@ -414,7 +414,7 @@ case "$1" in
   #
   # Other Docker commands
   #
-  'attach' | 'build' | 'commit' | 'cp' | 'create' | 'diff' | 'events' | 'exec' | 'export' | 'history' | 'images' | 'import' | 'info' | 'inspect' | 'kill' | 'load' | 'login' | 'logout' | 'logs' | 'port' | 'pause' | 'ps' | 'pull' | 'push' | 'rename' | 'restart' | 'rmi' | 'save' | 'search' | 'start' | 'stop' | 'tag' | 'top' | 'unpause' | 'wait' )
+  'daemon' | 'attach' | 'build' | 'commit' | 'cp' | 'create' | 'diff' | 'events' | 'exec' | 'export' | 'history' | 'images' | 'import' | 'info' | 'inspect' | 'kill' | 'load' | 'login' | 'logout' | 'logs' | 'network connect' | 'network create' | 'network disconnect' | 'network inspect' | 'network ls' | 'network rm' | 'pause' | 'port' | 'ps' | 'pull' | 'push' | 'rename' | 'restart' | 'rm' | 'rmi' | 'run' | 'save' | 'search' | 'start' | 'stats' | 'stop' | 'tag' | 'top' | 'unpause' | 'version' | 'volume create' | 'volume inspect' | 'volume ls' | 'volume rm' | 'wait' )
     docker $@
     ;;
 
