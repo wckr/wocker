@@ -1,24 +1,36 @@
 #!/bin/bash
 
 set -e
-if [[ ! -d /opt/bin ]]; then
-  mkdir /opt/bin
+
+PROFILE=/home/docker/.bash_profile
+PROMPT='\[\e[1;36m\]\h \w \$ \[\e[0m\]'
+BIN=/opt/bin
+
+#
+# Shell Prompt
+#
+if [[ ! -f $PROFILE ]]; then
+  touch $PROFILE
+  chown docker:docker $PROFILE
 fi
+
+if grep -q '^export PS1=.*$' $PROFILE; then
+  sed -i '/^export PS1=.*$/d' $PROFILE
+fi
+
+echo "export PS1=\"${PROMPT}\"" >> $PROFILE
 
 #
 # Install Wocker CLI
 #
-wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker
-chmod +x /opt/bin/wocker
+if [[ ! -d $BIN ]]; then
+  mkdir $BIN
+fi
+wget -q -O ${BIN}/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker
+chmod +x ${BIN}/wocker
 
 #
-# Pull Wocker image
+# Pull the Wocker image & create the first container
 #
 docker pull wocker/wocker:latest
-
-#
-# Add wocker user
-#
-adduser -h /home/wocker -s /bin/bash -G docker wocker
-cp -r ~/.ssh/ /home/wocker
-chown -R wocker /home/wocker/.ssh
+su -c 'wocker run --name wocker' docker
