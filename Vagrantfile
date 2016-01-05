@@ -1,6 +1,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# A dummy plugin for DockerRoot to set hostname and network correctly at the very first `vagrant up`
+module VagrantPlugins
+  module GuestLinux
+    class Plugin < Vagrant.plugin("2")
+      guest_capability("linux", "change_host_name") do
+        Cap::ChangeHostName
+      end
+
+      guest_capability("linux", "configure_networks") do
+        Cap::ConfigureNetworks
+      end
+    end
+  end
+end
+
 Vagrant.configure(2) do |config|
   config.vm.define "wocker"
   config.vm.box = "ailispaw/docker-root"
