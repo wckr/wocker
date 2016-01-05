@@ -302,7 +302,7 @@ case "$1" in
     else
       sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker
       docker pull wocker/wocker:latest
-      wocker_version_info
+      /opt/bin/wocker version
     fi
     ;;
 
