@@ -33,4 +33,9 @@ chmod +x ${BIN}/wocker
 # Pull the Wocker image & create the first container
 #
 docker pull wocker/wocker:latest
-su -c 'wocker run --name wocker' docker
+ID=$(docker ps -q -a -f name=wocker)
+if [ -z "$ID" ]; then
+  su -c 'wocker run --name wocker' docker
+else
+  su -c 'wocker start wocker' docker
+fi
