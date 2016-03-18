@@ -14,7 +14,7 @@ end
 Vagrant.configure(2) do |config|
   config.vm.define "wocker"
   config.vm.box = "ailispaw/docker-root"
-  config.vm.box_version = ">= 1.2.8"
+  config.vm.box_version = ">= 1.2.6"
 
   if Vagrant.has_plugin?("vagrant-triggers") then
     config.trigger.after [:up, :resume] do
