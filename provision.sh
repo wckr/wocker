@@ -35,7 +35,7 @@ chmod +x ${BIN}/wocker
 docker pull wocker/wocker:latest
 ID=$(docker ps -q -a -f name=wocker)
 if [ -z "$ID" ]; then
-  su -c 'wocker run --name wocker "-v /usr/bin/dumb-init:/dumb-init:ro --entrypoint=/dumb-init wocker/wocker sh -c /usr/bin/supervisord"' docker
+  su -c 'wocker run --name wocker' docker
 else
   su -c 'wocker start wocker' docker
 fi
