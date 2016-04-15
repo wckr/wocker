@@ -266,26 +266,26 @@ case "$1" in
     fi
     ;;
 
-    #
-    # wocker switch
-    #
-    'switch' )
+  #
+  # wocker switch
+  #
+  'switch' )
 
-      if [[ "$2" = '--help' ]]; then
-        wocker_switch_usage
-      else
+    if [[ "$2" = '--help' ]]; then
+      wocker_switch_usage
+    else
 
-        if [[ "$2" ]]; then
-          if [[ $(docker ps -q) ]]; then
-            docker stop $(docker ps --format='{{.Names}}')
-          fi
-          docker start $2
-        else
-          wocker_switch_usage
+      if [[ "$2" ]]; then
+        if [[ $(docker ps -q) ]]; then
+          docker stop $(docker ps --format='{{.Names}}')
         fi
-
+        docker start $2
+      else
+        wocker_switch_usage
       fi
-      ;;
+
+    fi
+    ;;
 
   #
   # wocker rm
