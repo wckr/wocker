@@ -61,8 +61,8 @@ wocker_usage() {
   echo "    search      Search the Docker Hub for images (Docker alias)"
   echo "    start       Start a stopped container (Docker alias)"
   echo "    stats       Display a live stream of container(s) resource usage statistics (Docker alias)"
-  echo "    stop        Stop a running container (Docker alias)"
-  echo "    switch      Stop a running container and Start a stopped container (Docker alias) "
+  echo "    stop        Stop the running container"
+  echo "    switch      Stop the running container then start a stopped container"
   echo "    tag         Tag an image into a repository (Docker alias)"
   echo "    theme-test  Import theme unit test data in to a running container"
   echo "    top         Display the running processes of a container (Docker alias)"
@@ -91,7 +91,7 @@ wocker_stop_usage() {
   echo ''
   echo 'Usage: wocker stop [OPTIONS] [CONTAINER...]'
   echo ''
-  echo 'Stop a running container.'
+  echo 'Stop the running container.'
   echo 'Sending SIGTERM and then SIGKILL after a grace period'
   echo ''
   echo '  --help=false    Print usage'
@@ -101,9 +101,9 @@ wocker_stop_usage() {
 
 wocker_switch_usage() {
   echo ''
-  echo 'Usage: wocker switch [CONTAINER...]'
+  echo 'Usage: wocker switch CONTAINER'
   echo ''
-  echo 'Stop a running container after Start a stopped container'
+  echo 'Stop the running container then start a stopped container'
   echo ''
   echo '  --help=false    Print usage'
 }
