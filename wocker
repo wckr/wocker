@@ -62,6 +62,7 @@ wocker_usage() {
   echo "    start       Start a stopped container (Docker alias)"
   echo "    stats       Display a live stream of container(s) resource usage statistics (Docker alias)"
   echo "    stop        Stop a running container (Docker alias)"
+  echo "    switch      Stop a running container and Start a stopped container (Docker alias) "
   echo "    tag         Tag an image into a repository (Docker alias)"
   echo "    theme-test  Import theme unit test data in to a running container"
   echo "    top         Display the running processes of a container (Docker alias)"
@@ -96,6 +97,15 @@ wocker_stop_usage() {
   echo '  --help=false    Print usage'
   echo '  -t, --time=10   Seconds to wait for stop before killing it'
   echo '  CONTAINER       If omitted, all running containers will be stopped.'
+}
+
+wocker_switch_usage() {
+  echo ''
+  echo 'Usage: wocker switch [CONTAINER...]'
+  echo ''
+  echo 'Stop a running container after Start a stopped container'
+  echo ''
+  echo '  --help=false    Print usage'
 }
 
 wocker_rm_usage() {
@@ -255,6 +265,27 @@ case "$1" in
 
     fi
     ;;
+
+    #
+    # wocker switch
+    #
+    'switch' )
+
+      if [[ "$2" = '--help' ]]; then
+        wocker_switch_usage
+      else
+
+        if [[ "$2" ]]; then
+          if [[ $(docker ps -q) ]]; then
+            docker stop $(docker ps --format='{{.Names}}')
+          fi
+          docker start $2
+        else
+          wocker_switch_usage
+        fi
+
+      fi
+      ;;
 
   #
   # wocker rm
