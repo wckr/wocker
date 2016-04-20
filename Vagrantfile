@@ -14,19 +14,7 @@ end
 Vagrant.configure(2) do |config|
   config.vm.define "wocker"
   config.vm.box = "ailispaw/docker-root"
-  config.vm.box_version = ">= 1.2.6"
-
-  if Vagrant.has_plugin?("vagrant-triggers") then
-    config.trigger.after [:up, :resume] do
-      info "Adjusting datetime after suspend and resume."
-      run_remote "sudo sntp -4sSc pool.ntp.org; date"
-    end
-  end
-
-  # Adjusting datetime before provisioning.
-  config.vm.provision :shell, run: "always" do |sh|
-    sh.inline = "sntp -4sSc pool.ntp.org; date"
-  end
+  config.vm.box_version = ">= 1.3.9"
 
   # plugin conflict
   if Vagrant.has_plugin?("vagrant-vbguest")
