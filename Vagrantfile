@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# A dummy plugin for DockerRoot to set hostname and network correctly at the very first `vagrant up`
+# A dummy plugin for Barge to set hostname and network correctly at the very first `vagrant up`
 module VagrantPlugins
   module GuestLinux
     class Plugin < Vagrant.plugin("2")
@@ -13,8 +13,7 @@ end
 
 Vagrant.configure(2) do |config|
   config.vm.define "wocker"
-  config.vm.box = "ailispaw/docker-root"
-  config.vm.box_version = ">= 1.3.9"
+  config.vm.box = "ailispaw/barge"
 
   # plugin conflict
   if Vagrant.has_plugin?("vagrant-vbguest")
@@ -28,7 +27,7 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = "wocker.dev"
   config.vm.network :private_network, ip: "10.0.23.16"
 
-  config.vm.synced_folder "./data", "/home/docker/data", create: true
+  config.vm.synced_folder "./data", "/home/bargee/data", create: true
 
   config.vm.provision :shell do |s|
     s.path = 'provision.sh'

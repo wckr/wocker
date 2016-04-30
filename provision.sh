@@ -2,7 +2,7 @@
 
 set -e
 
-PROFILE=/home/docker/.bash_profile
+PROFILE=/home/bargee/.bash_profile
 PROMPT='\[\e[1;36m\]\h \w \$ \[\e[0m\]'
 BIN=/opt/bin
 
@@ -11,7 +11,7 @@ BIN=/opt/bin
 #
 if [[ ! -f $PROFILE ]]; then
   touch $PROFILE
-  chown docker:docker $PROFILE
+  chown bargee:bargees $PROFILE
 fi
 
 if grep -q '^export PS1=.*$' $PROFILE; then
@@ -35,7 +35,7 @@ chmod +x ${BIN}/wocker
 docker pull wocker/wocker:latest
 ID=$(docker ps -q -a -f name=wocker)
 if [ -z "$ID" ]; then
-  su -c 'wocker run --name wocker' docker
+  su -c 'wocker run --name wocker' bargee
 else
-  su -c 'wocker start wocker' docker
+  su -c 'wocker start wocker' bargee
 fi
