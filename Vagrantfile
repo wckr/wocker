@@ -30,7 +30,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "./data", "/home/bargee/data", create: true
 
   config.vm.provision :shell do |s|
+    s.privileged = false
     s.path = 'provision.sh'
   end
-
 end
