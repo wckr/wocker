@@ -14,6 +14,7 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 - Daniel Bachhuber [@danielbachhuber](https://github.com/danielbachhuber)
 - A.I. [@ailispaw](https://github.com/ailispaw)
 - Atsushi Ando [@AtsushiA](https://github.com/AtsushiA)
+- Akiya [@akiya64](https://github.com/akiya64)
 
 ## Copyright / License
 
