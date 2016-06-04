@@ -27,7 +27,8 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = "wocker.dev"
   config.vm.network :private_network, ip: "10.0.23.16"
 
-  config.vm.synced_folder "./data", "/home/bargee/data", create: true
+  config.vm.synced_folder "./data", "/home/bargee/data", create: true,
+    mount_options: ["iocharset=utf8"]
 
   config.vm.provision :shell do |s|
     s.privileged = false
