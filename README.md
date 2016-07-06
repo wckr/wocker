@@ -1,4 +1,4 @@
-Wocker Commands
+Wocker CLI
 ===========
 
 ## Documentation
