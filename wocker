@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -e
 
 WOCKER_VERSION='1.1.2'
 WORDPRESS_VERSION='4.5.3'
