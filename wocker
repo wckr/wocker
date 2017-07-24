@@ -367,11 +367,11 @@ case "$1" in
         cid=$(docker ps -q)
         if [[ ! $cid =~ $'\n' ]]; then
           if [[ "$2" = 'shell' ]]; then
-            docker exec -u $USER -it $cid wp ${@:2}
+            docker exec -u $USER -it $cid wp "${@:2}"
           elif [[ "$2" = 'cli' ]] && [[ "$3" = 'update' ]]; then
             docker exec -it $cid wp cli update --nightly --allow-root
           else
-            docker exec -u $USER $cid wp ${@:2}
+            docker exec -u $USER $cid wp "${@:2}"
           fi
         fi
       fi
