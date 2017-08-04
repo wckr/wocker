@@ -117,6 +117,11 @@ wocker_rm_usage() {
   echo '  -f, --force=false   Force the removal of a running container (uses SIGKILL)'
 }
 
+wocker_commit_usage() {
+  echo ''
+  echo 'Usage: wocker commit CONTAINER [REPOSITORY[:TAG]]'
+}
+
 wocker_update_usage() {
   echo ''
   echo 'Usage: wocker update'
@@ -332,33 +337,40 @@ case "$1" in
 
     # Usage: package.sh <container-name> [image-name]
 
-    : ${CONTAINER_NAME:="${2:-wocker}"}
-    : ${IMAGE_NAME:="${3:-$CONTAINER_NAME}"}
+    if [[ "$2" = '--help' ]]; then
+      wocker_commit_usage
+    else
 
-    echo "Packaging [${CONTAINER_NAME}] ..."
+      CONTAINER_NAME="$2"
+      REPOSITORY="${3:-$CONTAINER_NAME}"
 
-    TMP_DIR=/tmp/${CONTAINER_NAME}
+      # echo "Packaging [${CONTAINER_NAME}] ..."
 
-    rm -rf ${TMP_DIR}
-    trap "rm -rf ${TMP_DIR}" EXIT
-    mkdir -p ${TMP_DIR}/data
+      TMP_DIR=/tmp/${CONTAINER_NAME}
 
-    docker stop ${CONTAINER_NAME} || true
-    docker commit ${CONTAINER_NAME} wocker_tmp/${CONTAINER_NAME}
+      set -e
 
-    cp -R ~/data/${CONTAINER_NAME} ${TMP_DIR}/data/
+      rm -rf ${TMP_DIR}
+      trap "rm -rf ${TMP_DIR}" EXIT
+      mkdir -p ${TMP_DIR}/data
 
-    cat <<EOF > ${TMP_DIR}/Dockerfile
+      docker stop ${CONTAINER_NAME} || true
+      docker commit ${CONTAINER_NAME} wocker_tmp/${CONTAINER_NAME}
+
+      cp -R ~/data/${CONTAINER_NAME} ${TMP_DIR}/data/
+
+      cat <<EOF > ${TMP_DIR}/Dockerfile
 FROM wocker_tmp/${CONTAINER_NAME}
 COPY data/${CONTAINER_NAME} /var/www/wordpress/
 RUN chown -R wocker:wocker /var/www/wordpress/
 EOF
 
-    docker build -t ${IMAGE_NAME} ${TMP_DIR}
-    docker rmi wocker_tmp/${CONTAINER_NAME}
+      docker build -t ${REPOSITORY} ${TMP_DIR}
+      docker rmi wocker_tmp/${CONTAINER_NAME}
 
-    echo "Packaged into an image [${IMAGE_NAME}]"
-  ;;
+      # echo "Packaged into an image [${REPOSITORY}]"
+    fi
+    ;;
 
   #
   # wocker update
