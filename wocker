@@ -326,6 +326,41 @@ case "$1" in
     ;;
 
   #
+  # wocker commit
+  #
+  'commit' )
+
+    # Usage: package.sh <container-name> [image-name]
+
+    : ${CONTAINER_NAME:="${2:-wocker}"}
+    : ${IMAGE_NAME:="${3:-$CONTAINER_NAME}"}
+
+    echo "Packaging [${CONTAINER_NAME}] ..."
+
+    TMP_DIR=/tmp/${CONTAINER_NAME}
+
+    rm -rf ${TMP_DIR}
+    trap "rm -rf ${TMP_DIR}" EXIT
+    mkdir -p ${TMP_DIR}/data
+
+    docker stop ${CONTAINER_NAME} || true
+    docker commit ${CONTAINER_NAME} wocker_tmp/${CONTAINER_NAME}
+
+    cp -R ~/data/${CONTAINER_NAME} ${TMP_DIR}/data/
+
+    cat <<EOF > ${TMP_DIR}/Dockerfile
+FROM wocker_tmp/${CONTAINER_NAME}
+COPY data/${CONTAINER_NAME} /var/www/wordpress/
+RUN chown -R wocker:wocker /var/www/wordpress/
+EOF
+
+    docker build -t ${IMAGE_NAME} ${TMP_DIR}
+    docker rmi wocker_tmp/${CONTAINER_NAME}
+
+    echo "Packaged into an image [${IMAGE_NAME}]"
+  ;;
+
+  #
   # wocker update
   #
   'update' )
