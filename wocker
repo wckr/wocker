@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-WOCKER_VERSION='1.1.4'
+WOCKER_VERSION='1.1.5'
 WORDPRESS_VERSION='4.8'
 RED=31
 USER=wocker
@@ -122,6 +122,8 @@ wocker_update_usage() {
   echo 'Usage: wocker update'
   echo ''
   echo 'Update the command line and the Docker image of Wocker.'
+  echo ''
+  echo '  --nightly   Update the command line and the Docker image of Wocker to the nightly version'
 }
 
 wocker_version_usage() {
