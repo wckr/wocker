@@ -362,6 +362,7 @@ case "$1" in
 
       cat <<EOF > ${TMP_DIR}/Dockerfile
 FROM wocker_tmp/${CONTAINER_NAME}
+RUN rm -rf /var/www/wordpress/ && mkdir -p /var/www/wordpress/
 COPY data/${CONTAINER_NAME} /var/www/wordpress/
 RUN chown -R wocker:wocker /var/www/wordpress/
 EOF
