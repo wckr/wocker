@@ -385,13 +385,11 @@ EOF
     if [[ "$2" = '--help' ]]; then
       wocker_update_usage
     elif [[ "$2" = '--nightly' ]]; then
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker && sudo chmod +x /opt/bin/wocker
       docker pull wocker/wocker:latest
-      /opt/bin/wocker version
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker && sudo chmod +x /opt/bin/wocker && /opt/bin/wocker version
     else
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker
       docker pull wocker/wocker:latest
-      /opt/bin/wocker version
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker && /opt/bin/wocker version
     fi
     ;;
 
