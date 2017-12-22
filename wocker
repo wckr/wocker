@@ -339,7 +339,8 @@ case "$1" in
 
     if [[ "$2" = '--help' ]]; then
       wocker_commit_usage
-    else
+
+    elif [[ "$2" && "$3" ]]; then
 
       CONTAINER_NAME="$2"
       REPOSITORY="${3:-$CONTAINER_NAME}"
@@ -361,6 +362,7 @@ case "$1" in
 
       cat <<EOF > ${TMP_DIR}/Dockerfile
 FROM wocker_tmp/${CONTAINER_NAME}
+RUN rm -rf /var/www/wordpress/ && mkdir -p /var/www/wordpress/
 COPY data/${CONTAINER_NAME} /var/www/wordpress/
 RUN chown -R wocker:wocker /var/www/wordpress/
 EOF
@@ -369,6 +371,9 @@ EOF
       docker rmi wocker_tmp/${CONTAINER_NAME}
 
       # echo "Packaged into an image [${REPOSITORY}]"
+
+    else
+      docker $@
     fi
     ;;
 
@@ -380,13 +385,11 @@ EOF
     if [[ "$2" = '--help' ]]; then
       wocker_update_usage
     elif [[ "$2" = '--nightly' ]]; then
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker && sudo chmod +x /opt/bin/wocker
       docker pull wocker/wocker:latest
-      /opt/bin/wocker version
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker && sudo chmod +x /opt/bin/wocker && /opt/bin/wocker version
     else
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker
       docker pull wocker/wocker:latest
-      /opt/bin/wocker version
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker && /opt/bin/wocker version
     fi
     ;;
 
