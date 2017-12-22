@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
     config.hostsupdater.remove_on_suspend = true
   end
 
-  config.vm.hostname = "wocker.dev"
+  config.vm.hostname = "wocker.test"
   config.vm.network :private_network, ip: "10.0.23.16"
 
   config.vm.synced_folder "./data", "/home/bargee/data", create: true,
