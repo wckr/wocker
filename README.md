@@ -1,6 +1,6 @@
 # Wocker [![license](https://img.shields.io/github/license/wckr/wocker.svg?maxAge=2592000)](https://github.com/wckr/wocker/blob/master/LICENSE)
 
-This repository provides a template Vagrantfile to create a Docker-based rapid development environment of WordPress. __IT TAKES JUST 3 SECONDS TO CREATE A NEW ONE!__
+Wocker is a local WordPress development environment. This repository provides a template Vagrantfile to create a Docker-based rapid WordPress development environment. It takes just **3 SECONDS** to create every new installation of WordPress.
 
 ## Documentation
 
@@ -21,4 +21,4 @@ This repository provides a template Vagrantfile to create a Docker-based rapid d
 
 ## Copyright / License
 
-Copyright &copy; 2015-2016 the contributors of the Wocker project under the [MIT License](https://github.com/wckr/wocker/blob/master/LICENSE).
+© 2015 the contributors of the Wocker project under the [MIT License](https://github.com/wckr/wocker/blob/master/LICENSE). Created and maintained by [Kite](https://github.com/ixkaito).
