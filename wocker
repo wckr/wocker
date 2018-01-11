@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-WOCKER_VERSION='1.2'
+WOCKER_VERSION='1.2.1'
 WORDPRESS_VERSION='4.9.1'
 RED=31
 USER=wocker
