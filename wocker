@@ -386,10 +386,10 @@ EOF
       wocker_update_usage
     elif [[ "$2" = '--nightly' ]]; then
       docker pull wocker/wocker:latest
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker && sudo chmod +x /opt/bin/wocker && /opt/bin/wocker version
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker && sudo chmod +x /opt/bin/wocker && wocker_version_info
     else
       docker pull wocker/wocker:latest
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker && /opt/bin/wocker version
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker && wocker_version_info
     fi
     ;;
 
