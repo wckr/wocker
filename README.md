@@ -18,6 +18,7 @@ This repository provides a template Vagrantfile to create a Docker-based rapid W
 - Primoz Cigler [@primozcigler](https://github.com/primozcigler)
 - Franz Josef Kaiser [@franz-josef-kaiser](https://github.com/franz-josef-kaiser)
 - Georgi Botzev [@GeorgeBotsev](https://github.com/GeorgeBotsev)
+- Rob Dyke [@robdyke](https://github.com/robdyke)
 
 ## Copyright / License
 
