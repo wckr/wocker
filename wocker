@@ -368,10 +368,10 @@ EOF
       if [[ "$2" = '--nightly' ]]; then
         branch='nightly'
       fi
-      docker pull wocker/wocker:latest
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/${branch}/wocker
-      sudo chmod +x /opt/bin/
-      sleep 1
+      docker pull wocker/wocker:latest && \
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/${branch}/wocker && \
+      sudo chmod +x /opt/bin/wocker && \
+      sleep 1 && \
       wocker version
     fi
     ;;
