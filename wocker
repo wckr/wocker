@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-WOCKER_VERSION='1.2.1'
-WORDPRESS_VERSION='4.9.1'
+WOCKER_VERSION='1.3'
+WORDPRESS_VERSION='4.9.2'
 RED=31
 USER=wocker
 DOCROOT=/var/www/wordpress
@@ -73,6 +73,8 @@ wocker_usage() {
   echo "    -v"
   echo "    volume      Manage Docker volumes"
   echo "    wait        Block until a container stops, then print its exit code (Docker alias)"
+  echo "    wordmove    Wordmove integration"
+  echo "    wp          WP-CLI integration"
   echo ""
   echo "Run 'wocker COMMAND --help' for more information on a command."
 }
@@ -148,47 +150,6 @@ wocker_destroy_usage() {
   echo 'Usage: wocker destroy [--files=false]'
   echo ''
   echo "Remove all containers and local related files if '--files' argument is set"
-}
-
-wocker_wp_usage() {
-  echo ''
-  echo 'Usage: wocker wp COMMAND SUBCOMMAND arg...'
-  echo ''
-  echo 'Execute WP-CLI commands in the running container'
-  echo 'See: http://wp-cli.org/'
-  echo ''
-  echo 'Commands:'
-  echo '    cache           Manage the object cache.'
-  echo '    cap             Manage user capabilities.'
-  echo '    cli             Get information about WP-CLI itself.'
-  echo '    comment         Manage comments.'
-  echo '    core            Download, install, update and otherwise manage WordPress proper.'
-  echo '    cron            Manage WP-Cron events and schedules.'
-  echo '    db              Perform basic database operations.'
-  echo '    eval            Execute arbitrary PHP code after loading WordPress.'
-  echo '    eval-file       Load and execute a PHP file after loading WordPress.'
-  echo '    export          Export content to a WXR file.'
-  echo '    help            Get help on a certain command.'
-  echo '    import          Import content from a WXR file.'
-  echo '    media           Manage attachments.'
-  echo '    menu            List, create, assign, and delete menus'
-  echo '    network         -'
-  echo '    option          Manage options.'
-  echo '    plugin          Manage plugins.'
-  echo '    post            Manage posts.'
-  echo '    rewrite         Manage rewrite rules.'
-  echo '    role            Manage user roles.'
-  echo '    scaffold        Generate code for post types, taxonomies, etc.'
-  echo '    search-replace  Search/replace strings in the database.'
-  echo '    shell           Interactive PHP console.'
-  echo '    sidebar         Manage sidebars.'
-  echo '    site            Perform site-wide operations.'
-  echo '    super-admin     List, add, and remove super admins from a network.'
-  echo '    term            Manage terms.'
-  echo '    theme           Manage themes.'
-  echo '    transient       Manage transients.'
-  echo '    user            Manage users.'
-  echo '    widget          Manage sidebar widgets.'
 }
 
 wocker_theme_test_usage() {
@@ -416,21 +377,34 @@ EOF
   #
   'wp' )
 
-    if [[ "$2" = '--help' ]]; then
-      wocker_wp_usage
-    else
-      if [[ $(docker ps -q) ]]; then
-        cid=$(docker ps -q)
-        if [[ ! $cid =~ $'\n' ]]; then
-          if [[ "$2" = 'shell' ]]; then
-            docker exec -u $USER -it $cid wp "${@:2}"
-          elif [[ "$2" = 'cli' ]] && [[ "$3" = 'update' ]]; then
-            docker exec -it $cid wp cli update --nightly --allow-root
-          else
-            docker exec -u $USER $cid wp "${@:2}"
-          fi
+    if [[ $(docker ps -q) ]]; then
+      cid=$(docker ps -q)
+      if [[ ! $cid =~ $'\n' ]]; then
+        if [[ "$2" = 'shell' ]]; then
+          docker exec -u $USER -it $cid wp "${@:2}"
+        elif [[ "$2" = 'cli' ]] && [[ "$3" = 'update' ]]; then
+          docker exec -it $cid wp cli update --nightly --allow-root
+        else
+          docker exec -u $USER $cid wp "${@:2}"
         fi
       fi
+    else
+      echo "No running container."
+    fi
+    ;;
+
+  #
+  # wocker wordmove
+  #
+  'wordmove' )
+
+    if [[ $(docker ps -q) ]]; then
+      cid=$(docker ps -q)
+      if [[ ! $cid =~ $'\n' ]]; then
+        docker exec -u $USER $cid wordmove "${@:2}"
+      fi
+    else
+      echo "No running container."
     fi
     ;;
 
