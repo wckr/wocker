@@ -404,6 +404,10 @@ EOF
       cid=$(docker ps -q)
       if [[ ! $cid =~ $'\n' ]]; then
         docker exec -u $USER -it $cid wordmove "${@:2}"
+        if [[ "$2" = 'init' ]]; then
+          docker exec $cid sed -i -e "s/sql_adapter.*/sql_adapter: wpcli # default is not available for Wocker/" ${DOCROOT}/movefile.yml
+          docker exec $cid sed -i -e "s#vhost: http://vhost.local#vhost: http://wocker.test#" ${DOCROOT}/movefile.yml
+        fi
       fi
     else
       echo "No running container."
