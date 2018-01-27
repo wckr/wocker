@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-WOCKER_VERSION='1.3.1'
+WOCKER_VERSION='1.3'
 WORDPRESS_VERSION='4.9.2'
 RED=31
 USER=wocker
@@ -363,12 +363,15 @@ EOF
 
     if [[ "$2" = '--help' ]]; then
       wocker_update_usage
-    elif [[ "$2" = '--nightly' ]]; then
-      docker pull wocker/wocker:latest
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker && sudo chmod +x /opt/bin/wocker && sleep 1 && wocker version
     else
-      docker pull wocker/wocker:latest
-      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker && sudo chmod +x /opt/bin/wocker && sleep 1 && wocker version
+      if [[ "$2" = '--nightly' ]]; then
+        docker pull wocker/wocker:latest
+        sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/nightly/wocker
+      else
+        docker pull wocker/wocker:latest
+        sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker
+      fi
+      sudo chmod +x /opt/bin/ && sleep 1 && wocker version
     fi
     ;;
 
