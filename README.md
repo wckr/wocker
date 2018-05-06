@@ -1,4 +1,4 @@
-# Wocker [![license](https://img.shields.io/github/license/wckr/wocker.svg?maxAge=2592000)](https://github.com/wckr/wocker/blob/master/LICENSE)
+# Wocker [![license](https://img.shields.io/github/license/wckr/wocker.svg)](https://github.com/wckr/wocker/blob/master/LICENSE)
 
 This repository provides a template Vagrantfile to create a Docker-based rapid WordPress development environment. It takes just **3 SECONDS** to create every new installation of WordPress.
 
