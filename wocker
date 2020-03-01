@@ -350,7 +350,7 @@ EOF
 
       if [[ "$2" ]]; then
         docker start $2
-        while ! wocker wp db export 2>/dev/null; do
+        while ! wocker 2>/dev/null wp db export; do
           sleep 1
         done
         # docker rm -f $2
