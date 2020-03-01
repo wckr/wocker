@@ -350,8 +350,7 @@ EOF
 
       if [[ "$2" ]]; then
         docker start $2
-        while ! wocker wp db check --quiet; do
-          echo "Checking database..."
+        while ! wocker exec in.spicagraph.com mysqladmin ping -h"localhost" --silent; do
           sleep 1
         done
         wocker wp db export
