@@ -350,11 +350,11 @@ EOF
 
       if [[ "$2" ]]; then
         docker start $2
-        while ! wocker exec in.spicagraph.com mysqladmin ping -h"localhost" > /dev/null; do
+        while ! docker exec $2 mysqladmin ping -h"localhost" --silent; do
           sleep 1
         done
-        wocker wp db export
-        # docker rm -f $2
+        docker exec -u wocker $2 wp db export && \
+        docker rm -f $2
       fi
     fi
     ;;
