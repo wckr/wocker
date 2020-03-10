@@ -451,7 +451,7 @@ EOF
 
       case "$2" in
         'ja' )
-          theme_test_data_url='https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml'
+          theme_test_data_url='https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-data-ja.xml'
           ;;
         'en' | * )
           theme_test_data_url='https://wpcom-themes.svn.automattic.com/demo/theme-unit-test-data.xml'
