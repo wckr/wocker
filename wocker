@@ -360,7 +360,7 @@ EOF
         while ! docker exec $2 mysqladmin ping -h"localhost" --silent; do
           sleep 1
         done
-        wocker exec -u wocker $2 wp db export && \
+        docker exec -u wocker $2 wp db export && \
         docker rm -f $2
       fi
     fi
