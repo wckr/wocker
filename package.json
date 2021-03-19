@@ -24,5 +24,11 @@
   "bugs": {
     "url": "https://github.com/wckr/wocker-cli/issues"
   },
-  "homepage": "https://github.com/wckr/wocker-cli#readme"
+  "homepage": "https://github.com/wckr/wocker-cli#readme",
+  "devDependencies": {
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
+    "webpack": "^5.26.3",
+    "webpack-cli": "^4.5.0"
+  }
 }
