@@ -23,7 +23,7 @@ echo "export PS1=\"${PROMPT}\"" >> $PROFILE
 # Install Wocker CLI
 #
 sudo mkdir -p $BIN
-sudo wget -q -O ${BIN}/wocker https://raw.githubusercontent.com/wckr/wocker-cli/master/wocker
+sudo wget -q -O ${BIN}/wocker https://raw.githubusercontent.com/wckr/wocker-cli/v1/wocker
 sudo chmod +x ${BIN}/wocker
 
 #
