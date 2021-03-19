@@ -1,3 +1,4 @@
+dist/
 node_modules/
 
 # Logfiles and tempfiles
