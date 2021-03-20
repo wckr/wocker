@@ -6,8 +6,7 @@
     "wocker": "./bin/wocker.js"
   },
   "scripts": {
-    "dev": "webpack --mode=development -w",
-    "prepare": "webpack --mode=production"
+    "dev": "webpack --mode=development -w"
   },
   "repository": {
     "type": "git",
