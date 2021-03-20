@@ -1,6 +1,6 @@
 {
   "name": "wocker-cli",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "description": "Wocker CLI",
   "bin": {
     "wocker": "./bin/wocker.js"
