@@ -1,7 +1,7 @@
 import run from './run'
 
 type Commands = {
-  [name: string]: (args: any) => void
+  [name: string]: () => void
 }
 
 const commands: Commands = { run }
