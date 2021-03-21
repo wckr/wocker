@@ -1,6 +1,6 @@
 import yargs from 'yargs'
 
-const run = (args: any) => {
+const run = (args: any): void => {
   console.log(args)
 }
 

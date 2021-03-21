@@ -1,9 +1,9 @@
-import run from './run';
+import run from './run'
 
 type Commands = {
-  [name: string]: (args: any) => void,
+  [name: string]: (args: any) => void
 }
 
-const commands: Commands = { run };
+const commands: Commands = { run }
 
-export default commands;
+export default commands
