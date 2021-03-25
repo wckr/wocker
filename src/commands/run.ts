@@ -4,24 +4,34 @@ import { exec } from 'child_process'
 const run = (): void => {
   const argv = yargs(process.argv.slice(3)).options({
     name: { type: 'string' },
+    volumne: { type: 'string', alias: 'v' },
     publish: { alias: 'p' },
   }).argv
 
   const name = argv.name ? `--name ${argv.name}` : ''
+  const volumne = argv.volumne
+    ? `-v ${argv.volumne}`
+    : argv.name
+    ? `-v ${process.cwd()}/${argv.name}`
+    : ''
   const publish = argv.publish ? `-p ${argv.publish}` : ''
+
   let image = argv._.join(' ')
   image = `wocker/wordpress${image ? `:${image}` : ''}`
 
-  const cmd = `docker run -d ${name} ${publish} ${image}`
+  const cmd = `docker run -d ${name} ${volumne} ${publish} ${image}`
 
-  exec(cmd, (err, stdout, stderr) => {
-    if (err) {
-      console.log(stderr)
-    }
-    if (stdout) {
-      console.log(stdout)
-    }
-  })
+  console.log(argv)
+
+  // exec(cmd, (err, stdout, stderr) => {
+  //   if (err || stderr) {
+  //     console.log(stderr)
+  //     return
+  //   }
+  //   if (stdout) {
+  //     console.log(stdout)
+  //   }
+  // })
 }
 
 export default run
