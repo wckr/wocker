@@ -4,13 +4,13 @@ import { exec } from 'child_process'
 const run = (): void => {
   const argv = yargs(process.argv.slice(3)).options({
     name: { type: 'string' },
-    volumne: { type: 'string', alias: 'v' },
+    volume: { type: 'string', alias: 'v' },
     publish: { alias: 'p' },
   }).argv
 
   const name = argv.name ? `--name ${argv.name}` : ''
-  const volumne = argv.volumne
-    ? `-v ${argv.volumne}`
+  const volume = argv.volume
+    ? `-v ${argv.volume}`
     : argv.name
     ? `-v ${process.cwd()}/${argv.name}`
     : ''
@@ -19,7 +19,7 @@ const run = (): void => {
   let image = argv._.join(' ')
   image = `wocker/wordpress${image ? `:${image}` : ''}`
 
-  const cmd = `docker run -d ${name} ${volumne} ${publish} ${image}`
+  const cmd = `docker run -d ${name} ${volume} ${publish} ${image}`
 
   console.log(argv)
 
