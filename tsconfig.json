@@ -12,10 +12,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "types": ["node", "jest"]
   },
   "exclude": [
     "dist",
+    "test",
     "node_modules"
   ],
   "include": [
