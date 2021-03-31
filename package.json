@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "webpack --mode=development -w",
     "lint": "eslint src",
+    "test": "jest",
     "prepare": "webpack --mode=production"
   },
   "repository": {
