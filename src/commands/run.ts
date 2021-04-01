@@ -21,7 +21,8 @@ const run = (): void => {
 
   const cmd = `docker run -d ${name} ${volume} ${publish} ${image}`
 
-  console.log(argv)
+  // console.log(argv)
+  console.log('test')
 
   // exec(cmd, (err, stdout, stderr) => {
   //   if (err || stderr) {

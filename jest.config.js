@@ -1,7 +1,9 @@
 /** @type {import('@jest/types/build/Config').InitialOptions} */
 module.exports = {
-  preset: 'ts-jest',
-  testMatch: ['<rootDir>/test/**/*.ts'],
+  testMatch: ['**/test/**/*.+(ts|tsx|js)'],
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+  },
   collectCoverage: true,
   errorOnDeprecated: true,
   testEnvironment: 'node',

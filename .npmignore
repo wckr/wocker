@@ -1,3 +1,4 @@
 /src
 tsconfig.json
 webpack.config.js
+jest.config.js
