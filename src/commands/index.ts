@@ -4,6 +4,10 @@ type Commands = {
   [name: string]: () => void
 }
 
-const commands: Commands = { run }
+const hello = (): string => {
+  return 'hello'
+}
+
+const commands: Commands = { run, hello }
 
 export default commands
