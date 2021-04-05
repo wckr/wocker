@@ -25,8 +25,6 @@ const run = (args: string[]): void | string => {
     .replace(/\s+/g, ' ')
     .trim()
 
-  // console.log(cmd)
-
   exec(cmd, (err, stdout, stderr) => {
     if (err || stderr) {
       console.log(stderr)
