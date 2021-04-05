@@ -16,7 +16,7 @@ const run = (args: string[]): void | string => {
     : argv.name
     ? `-v ${process.cwd()}/${argv.name}`
     : ''
-  const publish = argv.publish ? `-p ${argv.publish}` : ''
+  const publish = argv.publish ? `-p ${argv.publish}` : '-p 80 -p 3306 -p 8025'
 
   let image = argv._.join(' ')
   image = `wocker/wordpress${image ? `:${image}` : ''}`
@@ -32,6 +32,9 @@ const run = (args: string[]): void | string => {
     }
     if (stdout) {
       console.log(stdout)
+      exec('docker ps', (err, stdout, stderr) => {
+        console.log(stdout)
+      })
     }
   })
 }
