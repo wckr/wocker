@@ -29,14 +29,6 @@ test('$ wocker run -p 80:80 -p 3306:3306 -p 8025:8025', () => {
   )
 })
 
-test('$ wocker run -p 80:80 -p 3306:3306 -p 8025:8025', () => {
-  commands.run(['-p', '80:80', '-p', '3306:3306', '-p', '8025:8025'])
-  expect(exec).toHaveBeenCalledWith(
-    `docker run -d -p 80:80 -p 3306:3306 -p 8025:8025 wocker/wordpress`,
-    expect.anything(),
-  )
-})
-
 test('$ wocker run nginx', () => {
   commands.run(['nginx'])
   expect(exec).toHaveBeenCalledWith(
