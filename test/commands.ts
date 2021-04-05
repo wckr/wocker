@@ -1,16 +1,22 @@
 import commands from '../src/commands'
+import { exec } from 'child_process'
 
-const exec = jest.fn((cmd) => {
-  return cmd
-})
+const cwd = '/Users/test/wocker'
+jest.mock('child_process')
+jest.spyOn(process, 'cwd').mockReturnValue(cwd)
 
 test('wocker run', () => {
-  expect(commands.run()).toBe('test')
+  commands.run([])
+  expect(exec).toHaveBeenCalledWith(
+    'docker run -d wocker/wordpress',
+    expect.anything(),
+  )
 })
 
-// describe('wocker cli', () => {
-//   it('wocker run', () => {
-//     commands.run()
-//     const
-//   })
-// })
+test('wocker run --name test', () => {
+  commands.run(['--name', 'test'])
+  expect(exec).toHaveBeenCalledWith(
+    `docker run -d --name test -v ${cwd}/test wocker/wordpress`,
+    expect.anything(),
+  )
+})

@@ -3,7 +3,7 @@ import { exec } from 'child_process'
 
 yargs.command('run', 'Run a new project')
 
-const run = (args: string[]): void => {
+const run = (args: string[]): void | string => {
   const argv = yargs(args).options({
     name: { type: 'string' },
     volume: { type: 'string', alias: 'v' },
@@ -22,19 +22,20 @@ const run = (args: string[]): void => {
   image = `wocker/wordpress${image ? `:${image}` : ''}`
 
   const cmd = `docker run -d ${name} ${volume} ${publish} ${image}`
+    .replace(/\s+/g, ' ')
+    .trim()
 
-  console.log(argv)
-  // console.log('test')
+  // console.log(cmd)
 
-  // exec(cmd, (err, stdout, stderr) => {
-  //   if (err || stderr) {
-  //     console.log(stderr)
-  //     return
-  //   }
-  //   if (stdout) {
-  //     console.log(stdout)
-  //   }
-  // })
+  exec(cmd, (err, stdout, stderr) => {
+    if (err || stderr) {
+      console.log(stderr)
+      return
+    }
+    if (stdout) {
+      console.log(stdout)
+    }
+  })
 }
 
 export default run
