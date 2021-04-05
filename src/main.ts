@@ -1,16 +1,15 @@
+import yargs from 'yargs'
 import commands from './commands'
+
+yargs.alias('h', 'help')
+yargs.alias('v', 'version')
+yargs.demandCommand(1).help().argv
 
 const command = process.argv[2]
 
 if (command in commands) {
-  commands[command]()
+  commands[command](process.argv.slice(3))
 }
-
-// yargs.help("h").alias("h", "help").argv;
-
-// const args = process.argv;
-
-// console.log(args);
 
 // exec('docker', (err, stdout, stderr) => {
 //   if (err) return;

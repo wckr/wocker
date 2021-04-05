@@ -1,8 +1,10 @@
 import yargs from 'yargs'
 import { exec } from 'child_process'
 
-const run = (): void => {
-  const argv = yargs(process.argv.slice(3)).options({
+yargs.command('run', 'Run a new project')
+
+const run = (args: string[]): void => {
+  const argv = yargs(args).options({
     name: { type: 'string' },
     volume: { type: 'string', alias: 'v' },
     publish: { alias: 'p' },
@@ -21,8 +23,8 @@ const run = (): void => {
 
   const cmd = `docker run -d ${name} ${volume} ${publish} ${image}`
 
-  // console.log(argv)
-  console.log('test')
+  console.log(argv)
+  // console.log('test')
 
   // exec(cmd, (err, stdout, stderr) => {
   //   if (err || stderr) {

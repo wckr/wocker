@@ -1,9 +1,16 @@
 import commands from '../src/commands'
 
-test('hello', () => {
-  expect(commands.hello()).toBe('hello')
+const exec = jest.fn((cmd) => {
+  return cmd
 })
 
-// test('wocker run', () => {
-//   expect(commands.run).toBe('test')
+test('wocker run', () => {
+  expect(commands.run()).toBe('test')
+})
+
+// describe('wocker cli', () => {
+//   it('wocker run', () => {
+//     commands.run()
+//     const
+//   })
 // })
