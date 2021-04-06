@@ -29,7 +29,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run -p 80:80', () => {
     commands.run(['-p', '80:80'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80:80 wocker/wordpress`,
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80:80 -p 3306 -p 8025 wocker/wordpress`,
       expect.anything(),
     )
   })
