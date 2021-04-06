@@ -1,5 +1,6 @@
 import yargs from 'yargs'
 import { exec } from 'child_process'
+import dockerNames from 'docker-names'
 
 yargs.command('run', 'Run a new project')
 
