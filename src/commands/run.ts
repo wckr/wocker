@@ -10,22 +10,34 @@ const run = (args: string[]): void | string => {
     publish: { alias: 'p' },
   }).argv
 
+  // Container name
   const name = argv.name ? `--name ${argv.name}` : ''
+
+  // Volume
   const volume = argv.volume
     ? `-v ${argv.volume}`
     : argv.name
     ? `-v ${process.cwd()}/${argv.name}`
     : ''
-  const publish = argv.publish ? `-p ${argv.publish}` : '-p 80 -p 3306 -p 8025'
 
-  let image = argv._.join(' ')
-  image = `wocker/wordpress${image ? `:${image}` : ''}`
+  // Publish (ports)
+  const publish =
+    argv.publish instanceof Array
+      ? argv.publish.reduce((acc: string, p: string) => `${acc} -p ${p}`, '')
+      : typeof argv.publish === 'string'
+      ? `-p ${argv.publish}`
+      : '-p 80 -p 3306 -p 8025'
 
-  const cmd = `docker run -d ${name} ${volume} ${publish} ${image}`
+  // Image and tag
+  const tag = argv._[0]
+  const image = 'wocker/wordpress' + (tag ? `:${tag}` : '')
+
+  // The whole Docker command
+  const command = `docker run -d ${name} ${volume} ${publish} ${image}`
     .replace(/\s+/g, ' ')
     .trim()
 
-  exec(cmd, (err, stdout, stderr) => {
+  exec(command, (err, stdout, stderr) => {
     if (err || stderr) {
       console.log(stderr)
       return
