@@ -12,14 +12,13 @@ const run = (args: string[]): void | string => {
   }).argv
 
   // Container name
+  argv.name = argv.name || dockerNames.getRandomName()
   const name = argv.name ? `--name ${argv.name}` : ''
 
   // Volume
   const volume = argv.volume
     ? `-v ${argv.volume}`
-    : argv.name
-    ? `-v ${process.cwd()}/${argv.name}`
-    : ''
+    : `-v ${process.cwd()}/${argv.name}`
 
   // Publish (ports)
   const publish =
