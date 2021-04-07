@@ -51,12 +51,17 @@ const run = (args: string[]): void | string => {
       console.log(stderr)
       return
     }
-    if (stdout) {
+
+    console.log(stdout)
+
+    exec(`docker port ${stdout}`, (err, stdout, stderr) => {
+      if (err || stderr) {
+        console.log(stderr)
+        return
+      }
+
       console.log(stdout)
-      exec('docker ps', (err, stdout, stderr) => {
-        console.log(stdout)
-      })
-    }
+    })
   })
 }
 
