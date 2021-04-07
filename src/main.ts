@@ -7,15 +7,18 @@ yargs.alias('v', 'version')
 yargs.demandCommand(1).help().argv
 
 const command = process.argv[2]
+const argv = process.argv.slice(3)
 
 if (command in commands) {
-  commands[command](process.argv.slice(3))
+  commands[command](argv)
 } else {
-  expect
+  exec(`docker ${command} ${argv.join(' ')}`, (err, stdout, stderr) => {
+    if (err || stderr) {
+      console.log(stderr)
+      return
+    }
+    if (stdout) {
+      console.log(stdout)
+    }
+  })
 }
-
-// exec('docker', (err, stdout, stderr) => {
-//   if (err) return;
-//   if (stdout) console.log(stdout);
-//   if (stderr) console.log(stderr);
-// });
