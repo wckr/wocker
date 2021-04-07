@@ -8,6 +8,7 @@ const run = (args: string[]): void | string => {
   const defaults = {
     name: dockerNames.getRandomName(),
     ports: ['80', '3306', '8025'],
+    image: 'wocker/wordpress',
   }
 
   const argv = yargs(args).options({
@@ -20,7 +21,7 @@ const run = (args: string[]): void | string => {
   const name = `--name ${argv.name}`
 
   // Volume
-  argv.volume = argv.volume ? `${argv.volume}` : `${process.cwd()}/${argv.name}`
+  argv.volume = argv.volume || `${process.cwd()}/${argv.name}`
   const volume = `-v ${argv.volume}:/var/www/wordpress:rw`
 
   // Publish (ports)
@@ -38,7 +39,7 @@ const run = (args: string[]): void | string => {
 
   // Image and tag
   const tag = argv._[0]
-  const image = 'wocker/wordpress' + (tag ? `:${tag}` : '')
+  const image = defaults.image + (tag ? `:${tag}` : '')
 
   // The whole Docker command
   const command = `docker run -d ${name} ${volume} ${publish} ${image}`
