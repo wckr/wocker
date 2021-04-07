@@ -1,3 +1,4 @@
+import { exec } from 'child_process'
 import yargs from 'yargs'
 import commands from './commands'
 
@@ -9,6 +10,8 @@ const command = process.argv[2]
 
 if (command in commands) {
   commands[command](process.argv.slice(3))
+} else {
+  expect
 }
 
 // exec('docker', (err, stdout, stderr) => {
