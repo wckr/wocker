@@ -26,18 +26,34 @@ describe('Test the `run` command', () => {
     )
   })
 
-  test('$ wocker run -p 80:80', () => {
-    commands.run(['-p', '80:80'])
+  test('$ wocker run -p 80', () => {
+    commands.run(['-p', '80'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80:80 -p 3306 -p 8025 wocker/wordpress`,
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80 -p 3306 -p 8025 wocker/wordpress`,
       expect.anything(),
     )
   })
 
-  test('$ wocker run -p 80:80 -p 3306:3306 -p 8025:8025', () => {
-    commands.run(['-p', '80:80', '-p', '3306:3306', '-p', '8025:8025'])
+  test('$ wocker run -p 8888:80', () => {
+    commands.run(['-p', '8888:80'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80:80 -p 3306:3306 -p 8025:8025 wocker/wordpress`,
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 8888:80 -p 3306 -p 8025 wocker/wordpress`,
+      expect.anything(),
+    )
+  })
+
+  test('$ wocker run -p 8888:80 -p 8889:3306', () => {
+    commands.run(['-p', '8888:80', '-p', '8889:3306'])
+    expect(exec).toHaveBeenCalledWith(
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 8888:80 -p 8889:3306 -p 8025 wocker/wordpress`,
+      expect.anything(),
+    )
+  })
+
+  test('$ wocker run -p 8888:80 -p 8889:3306 -p 8890:443', () => {
+    commands.run(['-p', '8888:80', '-p', '8889:3306', '-p', '8890:443'])
+    expect(exec).toHaveBeenCalledWith(
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 8888:80 -p 8889:3306 -p 8890:443 -p 8025 wocker/wordpress`,
       expect.anything(),
     )
   })

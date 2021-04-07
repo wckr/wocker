@@ -5,14 +5,18 @@ import dockerNames from 'docker-names'
 yargs.command('run', 'Run a new project')
 
 const run = (args: string[]): void | string => {
+  const defaults = {
+    name: dockerNames.getRandomName(),
+    ports: ['80', '3306', '8025'],
+  }
+
   const argv = yargs(args).options({
-    name: { type: 'string' },
+    name: { type: 'string', default: defaults.name },
     volume: { type: 'string', alias: 'v' },
-    publish: { alias: 'p' },
+    publish: { alias: 'p', default: defaults.ports },
   }).argv
 
   // Container name
-  argv.name = argv.name || dockerNames.getRandomName()
   const name = `--name ${argv.name}`
 
   // Volume
@@ -20,12 +24,17 @@ const run = (args: string[]): void | string => {
   const volume = `-v ${argv.volume}:/var/www/wordpress:rw`
 
   // Publish (ports)
-  const publish =
-    argv.publish instanceof Array
-      ? argv.publish.reduce((acc: string, p: string) => `${acc} -p ${p}`, '')
-      : typeof argv.publish === 'string'
-      ? `-p ${argv.publish}`
-      : '-p 80 -p 3306 -p 8025'
+  if (!(argv.publish instanceof Array)) {
+    argv.publish = [`${argv.publish}`]
+  }
+
+  const ports = argv.publish.map((p) => p.split(':').pop())
+
+  argv.publish.push(...defaults.ports.filter((p) => !ports.includes(p)))
+
+  const publish = argv.publish.reduce((acc: string, p: string) => {
+    return `${acc} -p ${p}`
+  }, '')
 
   // Image and tag
   const tag = argv._[0]
