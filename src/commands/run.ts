@@ -6,46 +6,46 @@ import getPort from 'get-port'
 yargs.command('run', 'Run a new project')
 
 const run = (args: string[]): void | string => {
-  ;(async () => {
-    const defaults = {
-      name: dockerNames.getRandomName(),
-      ports: [
-        `${await getPort()}:80`,
-        `${await getPort()}:3306`,
-        `${await getPort()}:8025`,
-      ],
-      image: 'wocker/wordpress',
-    }
+  const defaults = {
+    name: dockerNames.getRandomName(),
+    ports: ['80', '3306', '8025'],
+    image: 'wocker/wordpress',
+  }
 
-    const argv = yargs(args).options({
-      name: { type: 'string', default: defaults.name },
-      volume: { type: 'string', alias: 'v' },
-      publish: { alias: 'p', default: defaults.ports },
-    }).argv
+  const argv = yargs(args).options({
+    name: { type: 'string', default: defaults.name },
+    volume: { type: 'string', alias: 'v' },
+    publish: { alias: 'p', default: [''] },
+  }).argv
 
-    // Container name
-    const name = `--name ${argv.name}`
+  // Container name
+  const name = `--name ${argv.name}`
 
-    // Volume
-    argv.volume = argv.volume || `${process.cwd()}/${argv.name}`
-    const volume = `-v ${argv.volume}:/var/www/wordpress:rw`
+  // Volume
+  argv.volume = argv.volume || `${process.cwd()}/${argv.name}`
+  const volume = `-v ${argv.volume}:/var/www/wordpress:rw`
 
-    // Publish (ports)
-    if (!(argv.publish instanceof Array)) {
-      argv.publish = [`${argv.publish}`]
-    }
+  // Image and tag
+  const tag = argv._[0]
+  const image = defaults.image + (tag ? `:${tag}` : '')
 
-    const ports = argv.publish.map((p) => p.split(':').pop())
+  // Publish (ports)
+  if (!(argv.publish instanceof Array)) {
+    argv.publish = [`${argv.publish}`]
+  }
 
-    argv.publish.push(...defaults.ports.filter((p) => !ports.includes(p)))
+  const ports = defaults.ports.filter(
+    (p) => !argv.publish.map((p) => p.split(':').pop()).includes(p),
+  )
+  const getPorts = async () =>
+    Promise.all(ports.map((p) => `${getPort()}:${p}`))
+
+  getPorts().then((ports) => {
+    argv.publish.push(...ports)
 
     const publish = argv.publish.reduce((acc: string, p: string) => {
       return `${acc} -p ${p}`
     }, '')
-
-    // Image and tag
-    const tag = argv._[0]
-    const image = defaults.image + (tag ? `:${tag}` : '')
 
     // The whole Docker command
     const command = `docker run -d ${name} ${volume} ${publish} ${image}`
@@ -60,16 +60,16 @@ const run = (args: string[]): void | string => {
 
       console.log(stdout)
 
-      exec(`docker port ${stdout}`, (err, stdout, stderr) => {
-        if (err || stderr) {
-          console.log(stderr)
-          return
-        }
+      // exec(`docker port ${stdout}`, (err, stdout, stderr) => {
+      //   if (err || stderr) {
+      //     console.log(stderr)
+      //     return
+      //   }
 
-        console.log(stdout)
-      })
+      //   console.log(stdout)
+      // })
     })
-  })()
+  })
 }
 
 export default run
