@@ -5,6 +5,7 @@ import dockerNames from 'docker-names'
 const cwd = '/Users/test/wocker'
 const name = 'foolish_kite'
 const docroot = '/var/www/wordpress'
+const publish = '-p 80 -p 3306 -p 8025'
 const image = 'wocker/wordpress'
 
 jest.spyOn(process, 'cwd').mockReturnValue(cwd)
@@ -15,7 +16,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run', () => {
     commands.run([])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80 -p 3306 -p 8025 ${image}`,
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw ${publish} ${image}`,
       expect.anything(),
     )
   })
@@ -23,7 +24,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run --name test', () => {
     commands.run(['--name', 'test'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name test -v ${cwd}/test:${docroot}:rw -p 80 -p 3306 -p 8025 ${image}`,
+      `docker run -d --name test -v ${cwd}/test:${docroot}:rw ${publish} ${image}`,
       expect.anything(),
     )
   })
@@ -31,7 +32,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run --name=test', () => {
     commands.run(['--name=test'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name test -v ${cwd}/test:${docroot}:rw -p 80 -p 3306 -p 8025 ${image}`,
+      `docker run -d --name test -v ${cwd}/test:${docroot}:rw ${publish} ${image}`,
       expect.anything(),
     )
   })
@@ -39,7 +40,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run --volume /Users/test/wordpress', () => {
     commands.run(['--volume', '/Users/test/wordpress'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v /Users/test/wordpress:${docroot}:rw -p 80 -p 3306 -p 8025 ${image}`,
+      `docker run -d --name ${name} -v /Users/test/wordpress:${docroot}:rw ${publish} ${image}`,
       expect.anything(),
     )
   })
@@ -47,7 +48,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run -v /Users/test/wordpress', () => {
     commands.run(['-v', '/Users/test/wordpress'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v /Users/test/wordpress:${docroot}:rw -p 80 -p 3306 -p 8025 ${image}`,
+      `docker run -d --name ${name} -v /Users/test/wordpress:${docroot}:rw ${publish} ${image}`,
       expect.anything(),
     )
   })
@@ -87,7 +88,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run nginx', () => {
     commands.run(['nginx'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80 -p 3306 -p 8025 ${image}:nginx`,
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw ${publish} ${image}:nginx`,
       expect.anything(),
     )
   })
@@ -95,7 +96,7 @@ describe('Test the `run` command', () => {
   test('$ wocker run nginx pwd', () => {
     commands.run(['bash'])
     expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw -p 80 -p 3306 -p 8025 ${image}:nginx`,
+      `docker run -d --name ${name} -v ${cwd}/${name}:${docroot}:rw ${publish} ${image}:nginx`,
       expect.anything(),
     )
   })
