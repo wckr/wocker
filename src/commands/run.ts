@@ -6,41 +6,39 @@ import getPort from 'get-port'
 yargs.command('run', 'Run a new project')
 
 const run = (args: string[]): void | string => {
-  const defaults = {
-    name: dockerNames.getRandomName(),
-    ports: ['80', '3306', '8025'],
-    image: 'wocker/wordpress',
-  }
+  ;(async () => {
+    const defaults = {
+      name: dockerNames.getRandomName(),
+      ports: ['80', '3306', '8025'],
+      image: 'wocker/wordpress',
+    }
 
-  const argv = yargs(args).options({
-    name: { type: 'string', default: defaults.name },
-    volume: { type: 'string', alias: 'v' },
-    publish: { alias: 'p', default: [''] },
-  }).argv
+    const argv = yargs(args).options({
+      name: { type: 'string', default: defaults.name },
+      volume: { type: 'string', alias: 'v' },
+      publish: { alias: 'p', default: [''] },
+    }).argv
 
-  // Container name
-  const name = `--name ${argv.name}`
+    // Container name
+    const name = `--name ${argv.name}`
 
-  // Volume
-  argv.volume = argv.volume || `${process.cwd()}/${argv.name}`
-  const volume = `-v ${argv.volume}:/var/www/wordpress:rw`
+    // Volume
+    argv.volume = argv.volume || `${process.cwd()}/${argv.name}`
+    const volume = `-v ${argv.volume}:/var/www/wordpress:rw`
 
-  // Image and tag
-  const tag = argv._[0]
-  const image = defaults.image + (tag ? `:${tag}` : '')
+    // Image and tag
+    const tag = argv._[0]
+    const image = defaults.image + (tag ? `:${tag}` : '')
 
-  // Publish (ports)
-  if (!(argv.publish instanceof Array)) {
-    argv.publish = [`${argv.publish}`]
-  }
+    // Publish (ports)
+    if (!(argv.publish instanceof Array)) {
+      argv.publish = [`${argv.publish}`]
+    }
 
-  const ports = defaults.ports.filter(
-    (p) => !argv.publish.map((p) => p.split(':').pop()).includes(p),
-  )
-  const getPorts = async () =>
-    Promise.all(ports.map((p) => `${getPort()}:${p}`))
-
-  getPorts().then((ports) => {
+    let ports = defaults.ports.filter(
+      (p) => !argv.publish.map((p) => p.split(':').pop()).includes(p),
+    )
+    ports = await Promise.all(ports.map((p) => `${getPort()}:${p}`))
     argv.publish.push(...ports)
 
     const publish = argv.publish.reduce((acc: string, p: string) => {
@@ -69,7 +67,7 @@ const run = (args: string[]): void | string => {
       //   console.log(stdout)
       // })
     })
-  })
+  })()
 }
 
 export default run
