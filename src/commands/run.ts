@@ -42,7 +42,7 @@ const run = async (args: string[]): Promise<void> => {
   argv.publish.push(...ports)
 
   const publish = argv.publish.reduce((acc: string, p: string) => {
-    return `${acc} -p ${p}`
+    return p ? `${acc} -p ${p}` : acc
   }, '')
 
   // The whole Docker command
