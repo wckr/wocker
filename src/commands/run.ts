@@ -34,10 +34,11 @@ const run = async (args: string[]): Promise<void> => {
     argv.publish = [`${argv.publish}`]
   }
 
-  let ports = defaults.ports.filter(
-    (p) => !argv.publish.map((p) => p.split(':').pop()).includes(p),
+  const ports = await Promise.all(
+    defaults.ports
+      .filter((p) => !argv.publish.map((p) => p.split(':').pop()).includes(p))
+      .map((p) => `${getPort()}:${p}`),
   )
-  ports = await Promise.all(ports.map((p) => `${getPort()}:${p}`))
   argv.publish.push(...ports)
 
   const publish = argv.publish.reduce((acc: string, p: string) => {
