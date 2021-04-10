@@ -1,5 +1,5 @@
 import yargs from 'yargs'
-import { exec } from 'child_process'
+import { spawn } from 'child_process'
 import dockerNames from 'docker-names'
 import getPort from 'get-port'
 
@@ -45,28 +45,33 @@ const run = async (args: string[]): Promise<void> => {
     return p ? `${acc} -p ${p}` : acc
   }, '')
 
+  console.log(argv)
+  console.log(args)
+
   // The whole Docker command
-  const command = `docker run -d ${name} ${volume} ${publish} ${image}`
-    .replace(/\s+/g, ' ')
-    .trim()
+  // const command = `docker run -d ${name} ${volume} ${publish} ${image}`
+  //   .replace(/\s+/g, ' ')
+  //   .trim()
 
-  exec(command, (err, stdout, stderr) => {
-    if (err || stderr) {
-      console.log(stderr)
-      return
-    }
+  const docker = spawn('docker', args)
 
-    console.log(stdout)
+  // spawn(command, (err, stdout, stderr) => {
+  //   if (err || stderr) {
+  //     console.log(stderr)
+  //     return
+  //   }
 
-    // exec(`docker port ${stdout}`, (err, stdout, stderr) => {
-    //   if (err || stderr) {
-    //     console.log(stderr)
-    //     return
-    //   }
+  //   console.log(stdout)
 
-    //   console.log(stdout)
-    // })
-  })
+  //   // exec(`docker port ${stdout}`, (err, stdout, stderr) => {
+  //   //   if (err || stderr) {
+  //   //     console.log(stderr)
+  //   //     return
+  //   //   }
+
+  //   //   console.log(stdout)
+  //   // })
+  // })
 }
 
 export default run

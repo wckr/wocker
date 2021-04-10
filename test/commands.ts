@@ -1,5 +1,5 @@
 import commands from '../src/commands'
-import { exec } from 'child_process'
+import { spawn } from 'child_process'
 import dockerNames from 'docker-names'
 
 const defaults = {
@@ -22,15 +22,23 @@ jest.mock('child_process')
 describe('Test the `run` command', () => {
   test('$ wocker run', async () => {
     await commands.run([])
-    expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw ${publish} ${defaults.image}`,
+    expect(spawn).toHaveBeenCalledWith(
+      // `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw ${publish} ${defaults.image}`,
+      'docker',
+      [
+        'run',
+        '-d',
+        `--name=${defaults.name}`,
+        `-v=${cwd}/${defaults.name}:${docroot}:rw`,
+        defaults.image,
+      ],
       expect.anything(),
     )
   })
 
   test('$ wocker run --name test', async () => {
     await commands.run(['--name', 'test'])
-    expect(exec).toHaveBeenCalledWith(
+    expect(spawn).toHaveBeenCalledWith(
       `docker run -d --name test -v ${cwd}/test:${docroot}:rw ${publish} ${defaults.image}`,
       expect.anything(),
     )
@@ -38,7 +46,7 @@ describe('Test the `run` command', () => {
 
   test('$ wocker run --name=test', async () => {
     await commands.run(['--name=test'])
-    expect(exec).toHaveBeenCalledWith(
+    expect(spawn).toHaveBeenCalledWith(
       `docker run -d --name test -v ${cwd}/test:${docroot}:rw ${publish} ${defaults.image}`,
       expect.anything(),
     )
@@ -46,7 +54,7 @@ describe('Test the `run` command', () => {
 
   test('$ wocker run --volume /Users/test/wordpress', async () => {
     await commands.run(['--volume', '/Users/test/wordpress'])
-    expect(exec).toHaveBeenCalledWith(
+    expect(spawn).toHaveBeenCalledWith(
       `docker run -d --name ${defaults.name} -v /Users/test/wordpress:${docroot}:rw ${publish} ${defaults.image}`,
       expect.anything(),
     )
@@ -54,7 +62,7 @@ describe('Test the `run` command', () => {
 
   test('$ wocker run -v /Users/test/wordpress', async () => {
     await commands.run(['-v', '/Users/test/wordpress'])
-    expect(exec).toHaveBeenCalledWith(
+    expect(spawn).toHaveBeenCalledWith(
       `docker run -d --name ${defaults.name} -v /Users/test/wordpress:${docroot}:rw ${publish} ${defaults.image}`,
       expect.anything(),
     )
@@ -62,39 +70,39 @@ describe('Test the `run` command', () => {
 
   test('$ wocker run -p 80', async () => {
     await commands.run(['-p', '80'])
-    expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 80 -p 3306 -p 8025 ${defaults.image}`,
+    expect(spawn).toHaveBeenCalledWith(
+      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 80 -p ${defaults.port}:3306 -p ${defaults.port}:8025 ${defaults.image}`,
       expect.anything(),
     )
   })
 
   test('$ wocker run -p 8888:80', async () => {
     await commands.run(['-p', '8888:80'])
-    expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 8888:80 -p 3306 -p 8025 ${defaults.image}`,
+    expect(spawn).toHaveBeenCalledWith(
+      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 8888:80 -p ${defaults.port}:3306 -p ${defaults.port}:8025 ${defaults.image}`,
       expect.anything(),
     )
   })
 
   test('$ wocker run -p 8888:80 --publish=8889:3306', async () => {
     await commands.run(['-p', '8888:80', '--publish=8889:3306'])
-    expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 8888:80 -p 8889:3306 -p 8025 ${defaults.image}`,
+    expect(spawn).toHaveBeenCalledWith(
+      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 8888:80 -p 8889:3306 -p ${defaults.port}:8025 ${defaults.image}`,
       expect.anything(),
     )
   })
 
   test('$ wocker run -p 8888:80 -p 8889:3306 -p 8890:443', async () => {
     await commands.run(['-p', '8888:80', '-p', '8889:3306', '-p', '8890:443'])
-    expect(exec).toHaveBeenCalledWith(
-      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 8888:80 -p 8889:3306 -p 8890:443 -p 8025 ${defaults.image}`,
+    expect(spawn).toHaveBeenCalledWith(
+      `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw -p 8888:80 -p 8889:3306 -p 8890:443 -p ${defaults.port}:8025 ${defaults.image}`,
       expect.anything(),
     )
   })
 
   test('$ wocker run nginx', async () => {
     await commands.run(['nginx'])
-    expect(exec).toHaveBeenCalledWith(
+    expect(spawn).toHaveBeenCalledWith(
       `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw ${publish} ${defaults.image}:nginx`,
       expect.anything(),
     )
@@ -102,7 +110,7 @@ describe('Test the `run` command', () => {
 
   test('$ wocker run nginx pwd', async () => {
     await commands.run(['bash'])
-    expect(exec).toHaveBeenCalledWith(
+    expect(spawn).toHaveBeenCalledWith(
       `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw ${publish} ${defaults.image}:nginx`,
       expect.anything(),
     )
