@@ -37,7 +37,7 @@ const run = async (args: string[]): Promise<void> => {
   const ports = await Promise.all(
     defaults.ports
       .filter((p) => !argv.publish.map((p) => p.split(':').pop()).includes(p))
-      .map((p) => `${getPort()}:${p}`),
+      .map(async (p) => `${await getPort()}:${p}`),
   )
   argv.publish.push(...ports)
 
