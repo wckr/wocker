@@ -18,16 +18,16 @@ const run = async (args: string[]): Promise<void> => {
     publish: { alias: 'p', default: [''] },
   }).argv
 
-  // Container name
-  const name = `--name ${argv.name}`
-
-  // Volume
-  argv.volume = argv.volume || `${process.cwd()}/${argv.name}`
-  const volume = `-v ${argv.volume}:/var/www/wordpress:rw`
-
   // Image and tag
   const tag = argv._[0]
   const image = defaults.image + (tag ? `:${tag}` : '')
+
+  // Container name
+  const name = `--name=${argv.name}`
+
+  // Volume
+  argv.volume = argv.volume || `${process.cwd()}/${argv.name}`
+  const volume = `-v=${argv.volume}:/var/www/wordpress:rw`
 
   // Publish (ports)
   if (!(argv.publish instanceof Array)) {
@@ -41,37 +41,24 @@ const run = async (args: string[]): Promise<void> => {
   )
   argv.publish.push(...ports)
 
-  const publish = argv.publish.reduce((acc: string, p: string) => {
-    return p ? `${acc} -p ${p}` : acc
-  }, '')
+  const publish = argv.publish.filter(Boolean).map((p) => `-p=${p}`)
 
-  console.log(argv)
-  console.log(args)
+  // Exec `docker run`
+  const docker = spawn('docker', ['run', '-d', name, volume, ...publish, image])
 
-  // The whole Docker command
-  // const command = `docker run -d ${name} ${volume} ${publish} ${image}`
-  //   .replace(/\s+/g, ' ')
-  //   .trim()
+  docker.stdout.on('data', (data) => {
+    console.log(data.toString())
+  })
 
-  const docker = spawn('docker', args)
+  docker.stderr.on('data', (data) => {
+    console.log(data.toString())
+  })
 
-  // spawn(command, (err, stdout, stderr) => {
-  //   if (err || stderr) {
-  //     console.log(stderr)
-  //     return
-  //   }
-
-  //   console.log(stdout)
-
-  //   // exec(`docker port ${stdout}`, (err, stdout, stderr) => {
-  //   //   if (err || stderr) {
-  //   //     console.log(stderr)
-  //   //     return
-  //   //   }
-
-  //   //   console.log(stdout)
-  //   // })
-  // })
+  docker.on('close', (code) => {
+    if (code === 0) {
+      console.log('OK')
+    }
+  })
 }
 
 export default run

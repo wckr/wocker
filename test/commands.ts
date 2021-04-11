@@ -10,7 +10,11 @@ const defaults = {
 
 const cwd = '/Users/test/wocker'
 const docroot = '/var/www/wordpress'
-const publish = `-p ${defaults.port}:80 -p ${defaults.port}:3306 -p ${defaults.port}:8025`
+const publish = [
+  `-p=${defaults.port}:80`,
+  `-p=${defaults.port}:3306`,
+  `-p=${defaults.port}:8025`,
+]
 
 jest.spyOn(process, 'cwd').mockReturnValue(cwd)
 jest.spyOn(dockerNames, 'getRandomName').mockReturnValue(defaults.name)
@@ -22,18 +26,14 @@ jest.mock('child_process')
 describe('Test the `run` command', () => {
   test('$ wocker run', async () => {
     await commands.run([])
-    expect(spawn).toHaveBeenCalledWith(
-      // `docker run -d --name ${defaults.name} -v ${cwd}/${defaults.name}:${docroot}:rw ${publish} ${defaults.image}`,
-      'docker',
-      [
-        'run',
-        '-d',
-        `--name=${defaults.name}`,
-        `-v=${cwd}/${defaults.name}:${docroot}:rw`,
-        defaults.image,
-      ],
-      expect.anything(),
-    )
+    expect(spawn).toHaveBeenCalledWith('docker', [
+      'run',
+      '-d',
+      `--name=${defaults.name}`,
+      `-v=${cwd}/${defaults.name}:${docroot}:rw`,
+      ...publish,
+      defaults.image,
+    ])
   })
 
   test('$ wocker run --name test', async () => {
