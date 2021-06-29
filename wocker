@@ -1,0 +1,543 @@
+#!/bin/bash -e
+
+WOCKER_VERSION='1.5.3'
+WORDPRESS_VERSION='5.6'
+RED=31
+USER=wocker
+DOCROOT=/var/www/wordpress
+
+image='wocker/wocker:latest'
+cname=''
+ports=''
+cid=''
+cids=''
+dirname=''
+containers=''
+force=false
+running=''
+branch='master'
+confirmation=''
+theme_test_data_url=''
+
+wocker_usage() {
+  echo ""
+  echo "Usage: wocker COMMAND [arg...]"
+  echo ""
+  echo "Management Commands:"
+  echo "  builder     Manage builds (Docker alias)"
+  echo "  checkpoint  Manage checkpoints (Docker alias)"
+  echo "  config      Manage Docker configs (Docker alias)"
+  echo "  container   Manage containers (Docker alias)"
+  echo "  context     Manage contexts (Docker alias)"
+  echo "  image       Manage images (Docker alias)"
+  echo "  network     Manage networks (Docker alias)"
+  echo "  node        Manage Swarm nodes (Docker alias)"
+  echo "  plugin      Manage plugins (Docker alias)"
+  echo "  scan*       Docker Scan (Docker Inc., v0.3.4) (Docker alias)"
+  echo "  secret      Manage Docker secrets (Docker alias)"
+  echo "  service     Manage services (Docker alias)"
+  echo "  stack       Manage Docker stacks (Docker alias)"
+  echo "  swarm       Manage Swarm (Docker alias)"
+  echo "  system      Manage Docker (Docker alias)"
+  echo "  trust       Manage trust on Docker images (Docker alias)"
+  echo "  volume      Manage volumes (Docker alias)"
+  echo ""
+  echo "Commands:"
+  echo "  attach      Attach local standard input, output, and error streams to a running container (Docker alias)"
+  echo "  build       Build an image from a Dockerfile (Docker alias)"
+  echo "  commit      Create a new image from a container's changes"
+  echo "  cp          Copy files/folders between a container and the local filesystem (Docker alias)"
+  echo "  create      Create a new container (Docker alias)"
+  echo "  destroy     Remove all containers and local related files if '--files' argument is set"
+  echo "  deploy      Deploy a new stack or update an existing stack (Docker alias)"
+  echo "  diff        Inspect changes to files or directories on a container's filesystem (Docker alias)"
+  echo "  events      Get real time events from the server (Docker alias)"
+  echo "  exec        Run a command in a running container (Docker alias)"
+  echo "  export      Export a container's filesystem as a tar archive (Docker alias)"
+  echo "  help        Show this help"
+  echo "  --help"
+  echo "  -h"
+  echo "  history     Show the history of an image (Docker alias)"
+  echo "  images      List images (Docker alias)"
+  echo "  import      Import the contents from a tarball to create a filesystem image (Docker alias)"
+  echo "  info        Display system-wide information (Docker alias)"
+  echo "  inspect     Return low-level information on Docker objects (Docker alias)"
+  echo "  kill        Kill one or more running containers (Docker alias)"
+  echo "  load        Load an image from a tar archive or STDIN (Docker alias)"
+  echo "  login       Log in to a Docker registry (Docker alias)"
+  echo "  logout      Log out from a Docker registry (Docker alias)"
+  echo "  logs        Fetch the logs of a container (Docker alias)"
+  echo "  pause       Pause all processes within one or more containers (Docker alias)"
+  echo "  port        List port mappings or a specific mapping for the container (Docker alias)"
+  echo "  ps          List containers (Docker alias)"
+  echo "  pull        Pull an image or a repository from a registry (Docker alias)"
+  echo "  push        Push an image or a repository to a registry (Docker alias)"
+  echo "  rename      Rename a container (Docker alias)"
+  echo "  restart     Restart one or more containers (Docker alias)"
+  echo "  rm          Remove one or more containers"
+  echo "  rmi         Remove one or more images (Docker alias)"
+  echo "  run         Run a command in a new container"
+  echo "  save        Save one or more images to a tar archive (streamed to STDOUT by default) (Docker alias)"
+  echo "  search      Search the Docker Hub for images (Docker alias)"
+  echo "  start       Start one or more stopped containers (Docker alias)"
+  echo "  stats       Display a live stream of container(s) resource usage statistics (Docker alias)"
+  echo "  stop        Stop the running container"
+  echo "  switch      Stop the running container then start a stopped container"
+  echo "  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE (Docker alias)"
+  echo "  theme-test  Import theme unit test data in to a running container"
+  echo "  top         Display the running processes of a container (Docker alias)"
+  echo "  unpause     Unpause all processes within one or more containers (Docker alias)"
+  echo "  update      Update Wocker to the latest version"
+  echo "  version     Show the Wocker version information"
+  echo "  --version"
+  echo "  -v"
+  echo "  wait        Block until one or more containers stop, then print their exit codes (Docker alias) (Docker alias)"
+  echo "  wordmove    Wordmove integration"
+  echo "  wp          WP-CLI integration"
+  echo ""
+  echo "Run 'wocker COMMAND --help' for more information on a command."
+}
+
+wocker_run_usage() {
+  echo ''
+  echo 'Usage: wocker run [--name=""] [IMAGE[:TAG]]'
+  echo ''
+  echo 'Run a new container'
+  echo ''
+  echo '  --name=""     Assign a name to the container. If omitted, it will be a random name.'
+  echo '  IMAGE[:TAG]   Docker image. If omitted, it will be wocker/wocker:latest.'
+}
+
+wocker_stop_usage() {
+  echo ''
+  echo 'Usage: wocker stop [OPTIONS] [CONTAINER...]'
+  echo ''
+  echo 'Stop the running container.'
+  echo 'Sending SIGTERM and then SIGKILL after a grace period'
+  echo ''
+  echo '  --help=false    Print usage'
+  echo '  -t, --time=10   Seconds to wait for stop before killing it'
+  echo '  CONTAINER       If omitted, all running containers will be stopped.'
+}
+
+wocker_switch_usage() {
+  echo ''
+  echo 'Usage: wocker switch CONTAINER'
+  echo ''
+  echo 'Stop the running container then start a stopped container'
+  echo ''
+  echo '  --help=false    Print usage'
+}
+
+wocker_rm_usage() {
+  echo ''
+  echo 'Usage: wocker rm [--force=false] CONTAINER [CONTAINER...]'
+  echo ''
+  echo 'Remove one or more containers'
+  echo ''
+  echo '  -f, --force=false   Force the removal of a running container (uses SIGKILL)'
+}
+
+wocker_commit_usage() {
+  echo ''
+  echo 'Usage: wocker commit CONTAINER [REPOSITORY[:TAG]]'
+}
+
+wocker_archive_usage() {
+  echo ''
+  echo 'Usage: wocker archive CONTAINER'
+  echo ''
+  echo 'Export the WordPress database and remove the Docker container but not the local files.'
+}
+
+wocker_update_usage() {
+  echo ''
+  echo 'Usage: wocker update'
+  echo ''
+  echo 'Update the command line and the Docker image of Wocker.'
+  echo ''
+  echo '  --nightly   Update the command line and the Docker image of Wocker to the nightly version'
+}
+
+wocker_version_usage() {
+  echo ''
+  echo 'Usage: wocker version | --version | -v'
+  echo ''
+  echo 'Show the Wocker version information'
+}
+
+wocker_version_info() {
+  echo "Wocker version: $WOCKER_VERSION"
+  echo "WordPress $WORDPRESS_VERSION"
+}
+
+wocker_destroy_usage() {
+  echo ''
+  echo 'Usage: wocker destroy [--files=false]'
+  echo ''
+  echo "Remove all containers and local related files if '--files' argument is set"
+}
+
+wocker_theme_test_usage() {
+  echo ''
+  echo 'Usage: wocker theme-test [LOCALE]'
+  echo ''
+  echo 'Import theme unit test data'
+  echo ''
+  echo '  LOCALE    Select which language you want to import. `en` and `ja` are available. If omitted, `en` will be imported.'
+}
+
+case "$1" in
+
+  #
+  # wocker run
+  #
+  'run' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_run_usage
+    else
+
+      if [[ "$2" = '--name' ]]; then
+        cname="$3"
+        image=${4:-$image}
+      elif [[ "$2" =~ ^--name=(.*)$ ]]; then
+        cname="${BASH_REMATCH[1]}"
+        image=${3:-$image}
+      else
+        cname=""
+        image=${2:-$image}
+      fi
+
+      if [[ $(docker ps -q) ]]; then
+        ports=$(docker inspect --format='{{.NetworkSettings.Ports}}' $(docker ps -q))
+      fi
+
+      if [[ $ports =~ "0.0.0.0 80" ]]; then
+        echo -e "\033[${RED}mCannot create container $cname: Bind for 0.0.0.0:80 failed: port is already allocated\033[m"
+
+      # Use existing WordPress files to run a container
+      elif [[ $cname && -d ~/data/${cname} ]]; then
+        docker run -d --name $cname -p 80:80 -p 3306:3306 -p 8025:8025 -v ~/data/${cname}:${DOCROOT}:rw $image
+
+      # Or copy WordPress files from the image to run a container
+      else
+
+        if [[ $cname ]]; then
+          docker run -d --name $cname $image
+        else
+          docker run -d $image
+        fi
+
+        cid=$(docker inspect --format='{{.Id}}' $(docker ps -l -q)) && \
+        cid=${cid:0:12} && \
+        dirname=$(docker inspect --format='{{.Name}}' $(docker ps -l -q)) && \
+        dirname=${dirname#*/} && \
+        cname=$dirname && \
+        docker cp $(docker ps -l -q):${DOCROOT} ~/data/${dirname} && \
+        docker rm -f $(docker ps -l -q) && \
+        docker run -d --name $cname -p 80:80 -p 3306:3306 -p 8025:8025 -v ~/data/${dirname}:${DOCROOT}:rw $image
+      fi
+
+    fi
+    ;;
+
+  #
+  # wocker stop
+  #
+  'stop' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_stop_usage
+    else
+
+      if [[ "$2" ]]; then
+        docker $@
+      elif [[ $(docker ps -q) ]]; then
+        docker stop $(docker ps --format='{{.Names}}')
+      fi
+
+    fi
+    ;;
+
+  #
+  # wocker switch
+  #
+  'switch' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_switch_usage
+    else
+
+      if [[ "$2" ]]; then
+        if [[ $(docker ps -q) ]]; then
+          docker stop $(docker ps --format='{{.Names}}')
+        fi
+        docker start $2
+      else
+        wocker_switch_usage
+      fi
+
+    fi
+    ;;
+
+  #
+  # wocker rm
+  #
+  'rm' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_rm_usage
+    else
+
+      case "$2" in
+        '-f' | '--force' | '--force=true' )
+          force=true
+          containers=${@:3}
+          ;;
+        * )
+          force=false
+          containers=${@:2}
+          ;;
+      esac
+
+      cids=$(docker inspect --format='{{.Id}}' $containers)
+
+      for cid in $cids; do
+        running=$(docker inspect --format='{{.State.Running}}' $cid)
+        dirname=$(docker inspect --format='{{.Name}}' $cid)
+        dirname=${dirname#*/}
+
+        docker rm --force=${force} $cid
+        if [[ $force = true || $running = false ]]; then
+          rm -rf ~/data/${dirname}
+        fi
+      done
+
+    fi
+    ;;
+
+  #
+  # wocker commit
+  #
+  'commit' )
+
+    # Usage: package.sh <container-name> [image-name]
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_commit_usage
+
+    elif [[ "$2" && "$3" ]]; then
+
+      CONTAINER_NAME="$2"
+      REPOSITORY="${3:-$CONTAINER_NAME}"
+
+      # echo "Packaging [${CONTAINER_NAME}] ..."
+
+      TMP_DIR=/tmp/${CONTAINER_NAME}
+
+      set -e
+
+      rm -rf ${TMP_DIR}
+      trap "rm -rf ${TMP_DIR}" EXIT
+      mkdir -p ${TMP_DIR}/data
+
+      docker stop ${CONTAINER_NAME} || true
+      docker commit ${CONTAINER_NAME} wocker_tmp/${CONTAINER_NAME}
+
+      cp -R ~/data/${CONTAINER_NAME} ${TMP_DIR}/data/
+
+      cat <<EOF > ${TMP_DIR}/Dockerfile
+FROM wocker_tmp/${CONTAINER_NAME}
+RUN rm -rf /var/www/wordpress/ && mkdir -p /var/www/wordpress/
+COPY data/${CONTAINER_NAME} /var/www/wordpress/
+RUN chown -R wocker:wocker /var/www/wordpress/
+EOF
+
+      docker build -t ${REPOSITORY} ${TMP_DIR}
+      docker rmi wocker_tmp/${CONTAINER_NAME}
+
+      # echo "Packaged into an image [${REPOSITORY}]"
+
+    else
+      docker $@
+    fi
+    ;;
+
+  #
+  # wocker archive
+  #
+  'archive' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_archive_usage
+    else
+
+      if [[ "$2" ]]; then
+        docker start $2
+        while ! docker exec $2 mysqladmin ping -h"localhost" --silent; do
+          sleep 1
+        done
+        docker exec -u wocker $2 wp db export && \
+        docker rm -f $2
+      fi
+    fi
+    ;;
+
+  #
+  # wocker --help | wocker -h
+  #
+  'help' | '--help' | '-h' )
+    wocker_usage
+    ;;
+
+  #
+  # wocker version | wocker --version | wocker -v
+  #
+  'version' | '--version' | '-v' )
+    if [[ "$2" = '--help' ]]; then
+      wocker_version_usage
+    else
+      wocker_version_info
+    fi
+    ;;
+
+  #
+  # wocker update
+  #
+  'update' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_update_usage
+    else
+      if [[ "$2" = '--nightly' ]]; then
+        branch='nightly'
+      fi
+      docker pull wocker/wocker:latest && \
+      sudo wget -q -O /opt/bin/wocker https://raw.githubusercontent.com/wckr/wocker-cli/${branch}/wocker && \
+      sudo chmod +x /opt/bin/wocker && \
+      wocker version 2>/dev/null
+    fi
+    ;;
+
+  #
+  # wocker wp
+  #
+  'wp' )
+
+    if [[ $(docker ps -q) ]]; then
+      cid=$(docker ps -q)
+      if [[ ! $cid =~ $'\n' ]]; then
+        if [[ "$2" = 'cli' ]] && [[ "$3" = 'update' ]]; then
+          docker exec -it $cid wp "${@:2}" --allow-root
+        else
+          docker exec -u $USER -it $cid wp "${@:2}"
+        fi
+      fi
+    else
+      echo "No running container."
+    fi
+    ;;
+
+  #
+  # wocker wordmove
+  #
+  'wordmove' )
+
+    if [[ $(docker ps -q) ]]; then
+      cid=$(docker ps -q)
+      if [[ ! $cid =~ $'\n' ]]; then
+        docker exec -u $USER -it $cid wordmove "${@:2}"
+        if [[ "$2" = 'init' ]]; then
+          docker exec $cid sed -i -e "s/sql_adapter.*/sql_adapter: wpcli # default is not available for Wocker/" ${DOCROOT}/movefile.yml
+          docker exec $cid sed -i -e "s#vhost: http://vhost.local#vhost: http://wocker.test#" ${DOCROOT}/movefile.yml
+        fi
+      fi
+    else
+      echo "No running container."
+    fi
+    ;;
+
+  #
+  # wocker theme-test
+  #
+  'theme-test' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_theme_test_usage
+    else
+
+      case "$2" in
+        'ja' )
+          theme_test_data_url='https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-data-ja.xml'
+          ;;
+        'en' | * )
+          theme_test_data_url='https://wpcom-themes.svn.automattic.com/demo/theme-unit-test-data.xml'
+          ;;
+      esac
+
+      if [[ $(docker ps -q) ]]; then
+        cid=$(docker ps -q)
+        if [[ ! $cid =~ $'\n' ]]; then
+          docker exec -u $USER $cid curl -OL $theme_test_data_url \
+          && docker exec -u $USER $cid wp plugin install wordpress-importer --activate \
+          && docker exec -u $USER $cid wp import ${theme_test_data_url##*/} --authors=create \
+          && docker exec -u $USER $cid rm ${theme_test_data_url##*/}
+        fi
+      fi
+
+    fi
+    ;;
+
+  #
+  # wocker destroy
+  #
+  'destroy' )
+
+    if [[ "$2" = '--help' ]]; then
+      wocker_destroy_usage
+    else
+
+      if [[ $(docker ps -a -q) ]]; then
+
+        echo 'Are you sure you want to remove all containers and related files? [y/N]'
+        read confirmation
+
+        case $confirmation in
+          'y' )
+            if [[ "$2" = '--files' || "$2" = '--files=true' ]]; then
+              for cid in $(docker ps -a -q); do
+                dirname=$(docker inspect --format='{{.Name}}' $cid)
+                dirname=${dirname#*/}
+                rm -rf ~/data/${dirname}
+              done
+            fi
+            docker rm -f $(docker ps -a -q)
+            ;;
+          * )
+            echo 'Containers and file will not be removed, since the confirmation was declined.'
+            ;;
+        esac
+
+      else
+        echo 'Nothing to destroy.'
+      fi
+
+    fi
+    ;;
+
+  #
+  # Other Docker commands
+  #
+  'builder' | 'checkpoint' | 'config' | 'container' | 'context' | 'image' | 'network' | 'node' | 'plugin' | 'scan' | 'secret' | 'service' | 'stack' | 'swarm' | 'system' | 'trust' | 'volume' | 'attach' | 'build' | 'commit' | 'cp' | 'create' | 'deploy' | 'diff' | 'events' | 'exec' | 'export' | 'history' | 'images' | 'import' | 'info' | 'inspect' | 'kill' | 'load' | 'login' | 'logout' | 'logs' | 'pause' | 'port' | 'ps' | 'pull' | 'push' | 'rename' | 'restart' | 'rm' | 'rmi' | 'run' | 'save' | 'search' | 'start' | 'stats' | 'stop' | 'tag' | 'top' | 'unpause' | 'update' | 'version' | 'wait' )
+    docker $@
+    ;;
+
+  #
+  # Show Wocker usage
+  #
+  * )
+    wocker_usage
+    ;;
+
+esac
