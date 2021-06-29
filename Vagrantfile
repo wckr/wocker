@@ -34,4 +34,7 @@ Vagrant.configure(2) do |config|
     s.privileged = false
     s.path = 'provision.sh'
   end
+
+  config.ssh.forward_agent = true
+
 end
