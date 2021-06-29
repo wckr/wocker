@@ -1,11 +1,12 @@
-.vagrant/
-.ssh_config
-log/
-user-data
-config.rb
-data/
+node_modules/
 
-# Ignore other unnecessary files.
+# Logfiles and tempfiles
+*.log
+/log/*
+!/log/.keep
+/tmp
+
+# Other unneeded files
 doc/
 *.swp
 *~
