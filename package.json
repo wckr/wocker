@@ -2,12 +2,6 @@
   "name": "wocker",
   "version": "2.0.0-beta.5",
   "description": "Docker-based WordPress development environment",
-  "scripts": {
-    "dev": "webpack --mode=development -w",
-    "lint": "eslint src",
-    "test": "jest",
-    "prepare": "webpack --mode=production"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wckr/wocker.git"
